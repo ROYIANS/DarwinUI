@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✿ Petit Journal — 手账设计系统</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@300;400&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --page:    #faf9f5;
+  --page2:   #f3f1ea;
+  --page3:   #ede9df;
+  --mint:    #a8d5c2;
+  --mint2:   #7ec4a8;
+  --mint3:   #c8ead9;
+  --mint4:   #e4f4ed;
+  --peach:   #f4c5a8;
+  --peach2:  #f0ad88;
+  --lavender:#c9b8e8;
+  --lav2:    #b8a4e0;
+  --yellow:  #f7e48a;
+  --yellow2: #f2d94e;
+  --rose:    #f4b8c8;
+  --rose2:   #eda8bc;
+  --blue:    #a8c8f0;
+  --ink:     #3d3530;
+  --ink2:    #5c524a;
+  --ink3:    #8a7e74;
+  --faint:   rgba(61,53,48,0.08);
+  --faint2:  rgba(61,53,48,0.14);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--page2);
+  color: var(--ink);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+  font-size: 14px;
+  overflow-x: hidden;
+  /* subtle dot grid background - like notebook paper */
+  background-image: radial-gradient(circle, rgba(61,53,48,0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── HANDWRITING FONT ── */
+.hand { font-family: 'Caveat', cursive; }
+.shadow-light { font-family: 'Shadows Into Light', cursive; }
+.serif { font-family: 'Noto Serif SC', serif; }
+
+/* ── PAPER TEXTURE UTILITY ── */
+.paper {
+  background: var(--page);
+  position: relative;
+}
+.paper::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent, transparent 27px,
+    rgba(168,213,194,0.18) 27px, rgba(168,213,194,0.18) 28px
+  );
+  pointer-events: none; border-radius: inherit;
+}
+
+/* ──────────────────────────────────────
+   HERO — the journal cover
+────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* washi tape strips at top */
+.washi-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 28px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--mint3) 0px, var(--mint3) 60px,
+    var(--yellow) 60px, var(--yellow) 120px,
+    var(--peach) 120px, var(--peach) 180px,
+    var(--lavender) 180px, var(--lavender) 240px,
+    var(--rose) 240px, var(--rose) 300px,
+    var(--blue) 300px, var(--blue) 360px
+  );
+  opacity: 0.7;
+}
+.washi-top::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 59px,
+    rgba(255,255,255,0.4) 59px, rgba(255,255,255,0.4) 61px
+  );
+}
+
+/* decorative corner tape */
+.corner-tape {
+  position: absolute;
+  width: 80px; height: 20px;
+  background: rgba(200,234,217,0.65);
+  transform-origin: center;
+}
+.ct-tl { top: 36px; left: -12px; transform: rotate(-35deg); }
+.ct-tr { top: 36px; right: -12px; transform: rotate(35deg); }
+.ct-bl { bottom: 40px; left: -12px; transform: rotate(35deg); }
+.ct-br { bottom: 40px; right: -12px; transform: rotate(-35deg); }
+
+/* floating stickers / deco */
+.deco {
+  position: absolute;
+  font-size: 28px;
+  pointer-events: none;
+  user-select: none;
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(var(--rot,0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--rot,0deg)); }
+}
+.d1 { top: 12%; left: 8%;  --rot: -12deg; animation-delay: 0s; }
+.d2 { top: 18%; right: 10%; --rot: 8deg;  animation-delay: 0.7s; }
+.d3 { top: 55%; left: 5%;  --rot: -5deg;  animation-delay: 1.2s; }
+.d4 { top: 62%; right: 7%; --rot: 15deg;  animation-delay: 0.4s; }
+.d5 { bottom: 15%; left: 15%; --rot: -8deg; animation-delay: 1.8s; }
+.d6 { bottom: 12%; right: 18%; --rot: 10deg; animation-delay: 0.9s; }
+.d7 { top: 38%; left: 3%;  --rot: -20deg; animation-delay: 1.5s; font-size:20px; }
+.d8 { top: 42%; right: 4%; --rot: 18deg;  animation-delay: 0.3s; font-size:20px; }
+
+/* hero card */
+.hero-card {
+  background: var(--page);
+  padding: 52px 56px 48px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 4px 6px 0px rgba(61,53,48,0.08), 8px 12px 24px rgba(61,53,48,0.06);
+  z-index: 2;
+}
+
+/* paper lines on hero card */
+.hero-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(168,213,194,0.2) 31px, rgba(168,213,194,0.2) 32px
+  );
+  pointer-events: none;
+}
+
+/* tape on hero card */
+.card-tape {
+  position: absolute;
+  width: 72px; height: 18px;
+  opacity: 0.75;
+  border-radius: 1px;
+}
+.card-tape.t1 { background: var(--mint3); top: -9px; left: 40px; transform: rotate(-2deg); }
+.card-tape.t2 { background: var(--yellow); top: -9px; right: 60px; transform: rotate(1.5deg); }
+.card-tape.t3 { background: var(--peach); bottom: -9px; left: 80px; transform: rotate(2deg); }
+
+.hero-date {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--ink3);
+  margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.hero-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 64px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 6px;
+  position: relative; z-index: 1;
+}
+.hero-title .mint { color: var(--mint2); }
+.hero-title .peach { color: var(--peach2); }
+
+.hero-sub {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink3);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  position: relative; z-index: 1;
+  border-left: 3px solid var(--mint3);
+  padding-left: 14px;
+}
+
+.hero-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  position: relative; z-index: 1;
+  margin-bottom: 28px;
+}
+.htag {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  color: var(--ink2);
+}
+.htag.m { background: var(--mint4); }
+.htag.p { background: rgba(244,197,168,0.4); }
+.htag.l { background: rgba(201,184,232,0.4); }
+.htag.y { background: rgba(247,228,138,0.5); }
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  position: relative; z-index: 1;
+  padding-top: 20px;
+  border-top: 1px dashed var(--faint2);
+}
+.hs-item { text-align: center; }
+.hs-n {
+  font-family: 'Caveat', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--mint2);
+  margin-bottom: 2px;
+}
+.hs-l { font-size: 11px; color: var(--ink3); letter-spacing: 0.05em; }
+
+/* ──────────────────────────────────────
+   LAYOUT
+────────────────────────────────────── */
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+
+/* ──────────────────────────────────────
+   SECTION HEADER — like a journal entry
+────────────────────────────────────── */
+.section-entry {
+  padding: 64px 0 48px;
+  border-bottom: 1px dashed var(--faint2);
+}
+.entry-date {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: var(--ink3);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.entry-date::before { content:''; width:20px; height:1px; background:var(--mint2); }
+.entry-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.entry-title .accent { color: var(--mint2); }
+.entry-body {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink2);
+  max-width: 620px;
+}
+
+/* ──────────────────────────────────────
+   COMP SECTION
+────────────────────────────────────── */
+.comp {
+  padding: 48px 0 36px;
+  border-bottom: 1px dashed var(--faint2);
+}
+.comp-num {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  color: var(--ink3);
+  margin-bottom: 4px;
+}
+.comp h3 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.comp h3 .ico { font-size: 22px; }
+.comp > .note {
+  font-size: 13px;
+  color: var(--ink3);
+  line-height: 1.7;
+  max-width: 560px;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 300;
+}
+
+/* ──────────────────────────────────────
+   EX LABEL
+────────────────────────────────────── */
+.ex {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: var(--ink3);
+  margin: 28px 0 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ex::before { content:'✦'; color: var(--mint2); font-size: 10px; }
+
+/* ──────────────────────────────────────
+   COLOR SWATCHES
+────────────────────────────────────── */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(8,1fr);
+  gap: 8px;
+  margin: 16px 0 20px;
+}
+.swatch-item { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.sw-box {
+  width: 100%; aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 8px rgba(61,53,48,0.1);
+}
+.sw-label {
+  font-family: 'Caveat', cursive;
+  font-size: 11px;
+  color: var(--ink3);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ──────────────────────────────────────
+   STICKER / BADGE
+────────────────────────────────────── */
+.sticker-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+
+.sticker {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  padding: 5px 16px;
+  border-radius: 20px;
+  color: var(--ink2);
+  display: inline-flex; align-items: center; gap: 5px;
+  position: relative;
+  box-shadow: 0 2px 0 rgba(61,53,48,0.08);
+}
+.sticker.s-mint { background: var(--mint4); }
+.sticker.s-peach{ background: rgba(244,197,168,0.35); }
+.sticker.s-lav  { background: rgba(201,184,232,0.35); }
+.sticker.s-yell { background: rgba(247,228,138,0.45); }
+.sticker.s-rose { background: rgba(244,184,200,0.35); }
+.sticker.s-blue { background: rgba(168,200,240,0.35); }
+
+/* outlined sticker */
+.sticker.s-outline {
+  background: transparent;
+  border: 1.5px dashed var(--mint2);
+  color: var(--mint2);
+}
+/* filled sticker */
+.sticker.s-solid {
+  background: var(--mint2);
+  color: white;
+  box-shadow: 2px 2px 0 var(--mint);
+}
+/* heart / star stickers */
+.sticker.s-stamp {
+  background: var(--page);
+  border: 1.5px solid var(--faint2);
+  border-radius: 4px;
+  transform: rotate(-2deg);
+  box-shadow: 2px 2px 0 var(--faint2);
+}
+
+/* ──────────────────────────────────────
+   WASHI TAPE DIVIDER
+────────────────────────────────────── */
+.washi {
+  height: 18px;
+  border-radius: 2px;
+  margin: 16px 0;
+  opacity: 0.6;
+  position: relative;
+}
+.washi.w-mint { background: repeating-linear-gradient(90deg, var(--mint3) 0px, var(--mint3) 8px, rgba(200,234,217,0.5) 8px, rgba(200,234,217,0.5) 16px); }
+.washi.w-peach{ background: repeating-linear-gradient(90deg, var(--peach) 0px, var(--peach) 8px, rgba(244,197,168,0.4) 8px, rgba(244,197,168,0.4) 16px); }
+.washi.w-lav  { background: repeating-linear-gradient(90deg, var(--lavender) 0px, var(--lavender) 8px, rgba(201,184,232,0.5) 8px, rgba(201,184,232,0.5) 16px); }
+.washi.w-yell { background: repeating-linear-gradient(90deg, var(--yellow) 0px, var(--yellow) 8px, rgba(247,228,138,0.5) 8px, rgba(247,228,138,0.5) 16px); }
+.washi.w-stripe { background: repeating-linear-gradient(45deg, var(--mint3) 0px, var(--mint3) 6px, transparent 6px, transparent 12px); }
+.washi.w-dots { background: var(--peach); background-image: radial-gradient(circle, rgba(255,255,255,0.6) 2px, transparent 2px); background-size: 8px 8px; }
+.washi.w-check {
+  background: var(--lavender);
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.3) 0px, rgba(255,255,255,0.3) 8px, transparent 8px, transparent 16px),
+                    repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0px, rgba(255,255,255,0.3) 8px, transparent 8px, transparent 16px);
+}
+/* tall washi tape strip on side */
+.washi-side {
+  width: 18px;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+/* ──────────────────────────────────────
+   MEMO CARD / POST-IT
+────────────────────────────────────── */
+.memo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin: 8px 0; }
+
+.memo {
+  padding: 20px 20px 24px;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 2px 4px 12px rgba(61,53,48,0.08), 3px 3px 0 rgba(61,53,48,0.05);
+}
+.memo::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 3px 3px 0 0;
+  opacity: 0.5;
+}
+.memo.m-mint { background: var(--mint4); }
+.memo.m-mint::before { background: var(--mint2); }
+.memo.m-peach{ background: rgba(244,197,168,0.25); }
+.memo.m-peach::before { background: var(--peach2); }
+.memo.m-lav  { background: rgba(201,184,232,0.2); }
+.memo.m-lav::before  { background: var(--lav2); }
+.memo.m-yell { background: rgba(247,228,138,0.25); }
+.memo.m-yell::before { background: var(--yellow2); }
+.memo.m-rose { background: rgba(244,184,200,0.2); }
+.memo.m-rose::before { background: var(--rose2); }
+.memo.m-white{ background: var(--page); border: 1px solid var(--faint2); }
+.memo.m-white::before { background: var(--mint2); }
+
+.memo-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+.memo-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.memo-body { font-size: 12px; line-height: 1.8; color: var(--ink2); }
+
+/* large memo / sticky note */
+.memo-lg {
+  padding: 32px 28px 36px;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 3px 5px 16px rgba(61,53,48,0.08);
+  margin: 8px 0;
+}
+
+/* ──────────────────────────────────────
+   PULL QUOTE
+────────────────────────────────────── */
+.pq {
+  background: var(--mint4);
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin: 8px 0;
+  position: relative;
+  box-shadow: 3px 3px 0 var(--mint3);
+}
+.pq::before {
+  content: '"';
+  font-family: 'Caveat', cursive;
+  font-size: 80px;
+  line-height: 0.7;
+  color: var(--mint2);
+  opacity: 0.4;
+  position: absolute;
+  top: 12px; left: 20px;
+  pointer-events: none;
+}
+.pq blockquote {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--ink);
+  padding-left: 24px;
+  position: relative; z-index: 1;
+}
+.pq-src {
+  font-size: 12px;
+  color: var(--ink3);
+  margin-top: 12px;
+  padding-left: 24px;
+  display: flex; align-items: center; gap: 8px;
+}
+.pq-src::before { content:'—'; color: var(--mint2); }
+
+/* small inline quote */
+.pq-sm {
+  border-left: 3px solid var(--mint2);
+  padding: 12px 0 12px 18px;
+  margin: 8px 0;
+}
+.pq-sm blockquote {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.pq-sm .src { font-size: 12px; color: var(--ink3); margin-top: 6px; }
+
+/* ──────────────────────────────────────
+   CALLOUT / ALERT BOX
+────────────────────────────────────── */
+.callout {
+  border-radius: 4px;
+  padding: 18px 20px;
+  margin: 8px 0;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.callout.c-mint  { background: var(--mint4); border: 1px solid rgba(168,213,194,0.5); }
+.callout.c-peach { background: rgba(244,197,168,0.2); border: 1px solid rgba(244,197,168,0.4); }
+.callout.c-lav   { background: rgba(201,184,232,0.18); border: 1px solid rgba(201,184,232,0.4); }
+.callout.c-yell  { background: rgba(247,228,138,0.25); border: 1px solid rgba(242,217,78,0.4); }
+.callout-ico { font-size: 20px; flex-shrink: 0; padding-top: 1px; }
+.callout-body {}
+.callout-t {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.callout p { font-size: 13px; line-height: 1.75; color: var(--ink2); }
+
+/* ──────────────────────────────────────
+   STAT CARDS
+────────────────────────────────────── */
+.stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 8px 0; }
+.stat-card {
+  background: var(--page);
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 2px 3px 0 var(--faint2);
+  border: 1px solid var(--faint);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card.s-mint::before  { background: var(--mint2); }
+.stat-card.s-peach::before { background: var(--peach2); }
+.stat-card.s-lav::before   { background: var(--lav2); }
+.stat-card.s-yell::before  { background: var(--yellow2); }
+.stat-ico { font-size: 24px; margin-bottom: 6px; display: block; }
+.stat-n {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.stat-n .unit { font-size: 18px; color: var(--mint2); }
+.stat-l { font-size: 11px; color: var(--ink3); line-height: 1.4; }
+
+/* ──────────────────────────────────────
+   DATA BARS
+────────────────────────────────────── */
+.dbars { margin: 8px 0; }
+.dbar { margin-bottom: 14px; }
+.dbar-header { display:flex; justify-content:space-between; margin-bottom:6px; align-items:center; }
+.dbar-name { font-size:13px; color:var(--ink2); display:flex; align-items:center; gap:6px; }
+.dbar-val { font-family:'Caveat',cursive; font-size:16px; color:var(--ink); font-weight:700; }
+.dbar-track { height: 8px; background: var(--faint); border-radius: 4px; overflow: hidden; }
+.dbar-fill { height: 8px; border-radius: 4px; }
+.df-mint  { background: linear-gradient(90deg, var(--mint2), var(--mint3)); }
+.df-peach { background: linear-gradient(90deg, var(--peach2), var(--peach)); }
+.df-lav   { background: linear-gradient(90deg, var(--lav2), var(--lavender)); }
+.df-yell  { background: linear-gradient(90deg, var(--yellow2), var(--yellow)); }
+
+/* ──────────────────────────────────────
+   BULLET LIST
+────────────────────────────────────── */
+.blist { list-style:none; padding:0; margin:8px 0; }
+.blist li {
+  display:flex; align-items:baseline; gap:10px;
+  padding:9px 0;
+  border-bottom:1px dashed var(--faint2);
+  font-size:14px; line-height:1.7; color:var(--ink2);
+}
+.blist li:first-child { border-top:1px dashed var(--faint2); }
+.blist .bull { color:var(--mint2); font-size:18px; line-height:1; flex-shrink:0; }
+
+/* checkbox list */
+.check-list { list-style:none; padding:0; margin:8px 0; }
+.check-list li {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 0;
+  font-size:14px; color:var(--ink2);
+  border-bottom:1px dashed var(--faint2);
+}
+.check-list li:first-child { border-top:1px dashed var(--faint2); }
+.cb {
+  width:16px; height:16px; border-radius:3px;
+  border:1.5px solid var(--mint2);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:white;
+}
+.cb.done { background:var(--mint2); border-color:var(--mint2); }
+.cb.done::after { content:'✓'; }
+.check-list li.done-item { color:var(--ink3); }
+.check-list li.done-item span { text-decoration:line-through; }
+
+/* ──────────────────────────────────────
+   TIMELINE — journal style
+────────────────────────────────────── */
+.tl { position:relative; margin:8px 0; padding-left:40px; }
+.tl::before {
+  content:''; position:absolute; left:10px; top:0; bottom:0;
+  width:2px;
+  background: repeating-linear-gradient(to bottom, var(--mint2) 0px, var(--mint2) 6px, transparent 6px, transparent 10px);
+}
+.tl-item { margin-bottom:24px; position:relative; }
+.tl-item:last-child { margin-bottom:0; }
+.tl-dot {
+  position:absolute; left:-36px; top:4px;
+  width:12px; height:12px; border-radius:50%;
+  background:var(--mint2); border:2px solid white;
+  box-shadow:0 0 0 2px var(--mint2);
+}
+.tl-date {
+  font-family:'Caveat',cursive; font-size:13px; color:var(--ink3); margin-bottom:2px;
+}
+.tl-title {
+  font-family:'Caveat',cursive; font-weight:700; font-size:17px; color:var(--ink); margin-bottom:3px;
+}
+.tl-body { font-size:12px; color:var(--ink2); line-height:1.7; }
+
+/* ──────────────────────────────────────
+   TABLE — cute lined style
+────────────────────────────────────── */
+.jtable { width:100%; border-collapse:collapse; margin:8px 0; }
+.jtable th {
+  font-family:'Caveat',cursive; font-size:15px; font-weight:700;
+  padding:10px 16px; text-align:left; color:var(--ink);
+  border-bottom:2px solid var(--mint2);
+  background: rgba(168,213,194,0.1);
+}
+.jtable td { font-size:13px; padding:10px 16px; border-bottom:1px dashed var(--faint2); color:var(--ink2); vertical-align:top; line-height:1.7; }
+.jtable tr:last-child td { border-bottom:none; }
+.jtable td:first-child { font-family:'Caveat',cursive; font-size:15px; color:var(--ink); }
+.jtable .hi { color:var(--mint2); font-weight:700; }
+.jtable .lo { color:var(--ink3); }
+
+/* ──────────────────────────────────────
+   META ROW
+────────────────────────────────────── */
+.meta {
+  display:flex; flex-wrap:wrap; gap:16px;
+  background:var(--page); border-radius:8px;
+  padding:16px 20px; border:1px dashed var(--faint2);
+  margin:8px 0;
+}
+.meta-item { }
+.meta-k { font-size:10px; color:var(--ink3); margin-bottom:2px; letter-spacing:0.05em; }
+.meta-v { font-family:'Caveat',cursive; font-size:20px; color:var(--ink); line-height:1; }
+
+/* ──────────────────────────────────────
+   BYLINE CARD
+────────────────────────────────────── */
+.byline {
+  display:flex; gap:20px; align-items:start;
+  background:var(--page); border-radius:8px;
+  padding:24px; border:1px dashed var(--faint2);
+  box-shadow:2px 3px 0 var(--faint);
+  margin:8px 0;
+  position:relative;
+}
+.byline-tape { position:absolute; top:-9px; left:32px; width:60px; height:16px; background:var(--mint3); opacity:0.7; border-radius:1px; transform:rotate(-1deg); }
+.byline-av {
+  width:52px; height:52px; border-radius:50%;
+  background:linear-gradient(135deg, var(--mint3), var(--mint2));
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Caveat',cursive; font-size:22px; color:white; font-weight:700;
+  box-shadow:0 2px 8px rgba(126,196,168,0.4);
+}
+.byline-name { font-family:'Caveat',cursive; font-weight:700; font-size:20px; color:var(--ink); margin-bottom:2px; }
+.byline-role { font-size:11px; color:var(--mint2); margin-bottom:8px; letter-spacing:0.05em; }
+.byline-bio { font-size:12px; color:var(--ink2); line-height:1.7; }
+
+/* ──────────────────────────────────────
+   TOC
+────────────────────────────────────── */
+.toc {
+  background:var(--page); border-radius:6px;
+  border:1px dashed var(--faint2); margin:8px 0;
+  overflow:hidden;
+}
+.toc-header {
+  background:var(--mint4); padding:10px 20px;
+  font-family:'Caveat',cursive; font-weight:700; font-size:16px; color:var(--ink);
+  border-bottom:1px dashed var(--faint2);
+  display:flex; align-items:center; gap:8px;
+}
+.toc-item {
+  display:flex; align-items:center;
+  padding:10px 20px; border-bottom:1px dashed var(--faint2);
+  font-size:14px; color:var(--ink2);
+  transition: background 0.15s;
+}
+.toc-item:last-child { border-bottom:none; }
+.toc-item:hover { background:var(--mint4); }
+.toc-n { font-family:'Caveat',cursive; font-size:16px; font-weight:700; color:var(--mint2); min-width:28px; }
+.toc-title { flex:1; }
+.toc-dots { flex:1; border-bottom:1px dotted var(--faint2); margin:0 10px; position:relative; top:-3px; }
+.toc-pg { font-family:'Caveat',cursive; font-size:15px; color:var(--ink3); }
+
+/* ──────────────────────────────────────
+   FIGURE
+────────────────────────────────────── */
+.fig-ph {
+  background:var(--page); border:1px dashed var(--mint2);
+  border-radius:4px; height:160px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Caveat',cursive; font-size:16px; color:var(--ink3);
+  flex-direction:column; gap:8px;
+}
+.fig-ph .ico { font-size:36px; }
+.fig-cap { font-size:12px; color:var(--ink3); margin-top:8px; line-height:1.6; font-family:'Noto Serif SC',serif; font-weight:300; }
+.fig-cap strong { font-family:'Caveat',cursive; font-size:14px; color:var(--mint2); margin-right:6px; }
+
+/* ──────────────────────────────────────
+   FOOTNOTE
+────────────────────────────────────── */
+.fn { border-top:1px dashed var(--faint2); padding-top:14px; margin:8px 0; }
+.fn-item { display:flex; gap:10px; margin-bottom:10px; align-items:baseline; }
+.fn-n { font-family:'Caveat',cursive; font-size:16px; color:var(--mint2); min-width:18px; font-weight:700; }
+.fn-t { font-size:12px; color:var(--ink3); line-height:1.7; }
+
+/* ──────────────────────────────────────
+   BREADCRUMB
+────────────────────────────────────── */
+.bc {
+  display:flex; align-items:center; gap:8px; margin:8px 0;
+  font-family:'Caveat',cursive; font-size:15px; color:var(--ink3);
+}
+.bc-sep { color:var(--mint2); }
+.bc-cur { color:var(--ink); font-weight:700; }
+
+/* ──────────────────────────────────────
+   ANNOTATION
+────────────────────────────────────── */
+.ann { display:grid; grid-template-columns:1fr 180px; gap:32px; margin:8px 0; }
+.ann-body p { font-size:14px; line-height:1.9; color:var(--ink2); margin-bottom:12px; }
+.ann-note {
+  background:var(--mint4); border-radius:4px; padding:16px;
+  font-size:12px; line-height:1.7; color:var(--ink2);
+  position:sticky; top:80px;
+}
+.ann-note strong {
+  display:block; font-family:'Caveat',cursive; font-size:14px;
+  color:var(--mint2); margin-bottom:6px;
+}
+
+/* ──────────────────────────────────────
+   DO / DON'T
+────────────────────────────────────── */
+.dodont { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:8px 0; }
+.do, .dont {
+  border-radius:6px; padding:24px;
+}
+.do { background:rgba(168,213,194,0.15); border:1px dashed rgba(126,196,168,0.5); }
+.dont { background:rgba(244,197,168,0.15); border:1px dashed rgba(240,173,136,0.5); }
+.do-l, .dont-l {
+  font-family:'Caveat',cursive; font-size:17px; font-weight:700;
+  margin-bottom:12px; display:flex; align-items:center; gap:6px;
+}
+.do-l { color:var(--mint2); }
+.dont-l { color:var(--peach2); }
+.do li, .dont li { font-size:13px; line-height:1.8; color:var(--ink2); margin-left:16px; margin-bottom:5px; }
+
+/* ──────────────────────────────────────
+   SPEC BLOCK
+────────────────────────────────────── */
+.spec {
+  background:var(--ink);
+  color:var(--page);
+  border-radius:6px;
+  padding:24px 28px;
+  margin:16px 0;
+  font-family:'IBM Plex Mono',monospace, 'Courier New';
+  font-size:12px;
+  line-height:1.9;
+  position:relative;
+  overflow:hidden;
+}
+.spec::before {
+  content:'💻 code';
+  position:absolute; top:10px; right:16px;
+  font-family:'Caveat',cursive; font-size:13px;
+  color:rgba(200,234,217,0.5);
+}
+.spec-h { font-family:'Caveat',cursive; font-size:15px; color:var(--mint3); margin-bottom:12px; }
+.spec-dim { color:rgba(250,249,245,0.3); }
+.spec-v { color:var(--mint3); }
+
+/* ──────────────────────────────────────
+   CHAPTER OPENER
+────────────────────────────────────── */
+.ch-opener {
+  background:var(--page); border-radius:8px;
+  padding:32px; margin:8px 0;
+  border:1px dashed var(--faint2);
+  position:relative; overflow:hidden;
+  box-shadow:3px 4px 0 var(--faint2);
+}
+.ch-opener-tape {
+  position:absolute; top:0; left:0; right:0; height:12px;
+  background:repeating-linear-gradient(90deg, var(--mint3) 0px, var(--mint3) 20px, var(--peach) 20px, var(--peach) 40px, var(--lavender) 40px, var(--lavender) 60px, var(--yellow) 60px, var(--yellow) 80px);
+  opacity:0.6;
+}
+.ch-opener-ico { font-size:40px; margin-bottom:12px; margin-top:8px; display:block; }
+.ch-opener-label { font-family:'Caveat',cursive; font-size:13px; color:var(--ink3); margin-bottom:4px; }
+.ch-opener-title { font-family:'Caveat',cursive; font-weight:700; font-size:32px; color:var(--ink); line-height:1.1; margin-bottom:8px; }
+.ch-opener-title .m { color:var(--mint2); }
+.ch-opener-desc { font-size:13px; color:var(--ink2); line-height:1.8; max-width:none; }
+
+/* ──────────────────────────────────────
+   COLLAGE / SCRAPBOOK LAYOUT
+────────────────────────────────────── */
+.collage {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin:8px 0;
+}
+.collage-item {
+  background:var(--page);
+  border-radius:4px;
+  padding:20px;
+  position:relative;
+  box-shadow:2px 3px 8px rgba(61,53,48,0.07);
+  border:1px solid var(--faint);
+}
+.collage-item.rotated { transform:rotate(-1.5deg); }
+.collage-item.rotated2 { transform:rotate(1deg); }
+.collage-tape {
+  position:absolute; width:56px; height:14px;
+  opacity:0.65; border-radius:1px;
+}
+.ct-top { top:-7px; left:50%; transform:translateX(-50%) rotate(-1deg); }
+
+/* ──────────────────────────────────────
+   SPREAD LAYOUT — 2-page journal spread
+────────────────────────────────────── */
+.spread {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--faint2);
+  border-radius:6px;
+  overflow:hidden;
+  background:var(--page);
+  margin:8px 0;
+  box-shadow:4px 6px 20px rgba(61,53,48,0.08);
+}
+.spread-left { border-right:2px solid var(--faint2); padding:28px 24px; position:relative; }
+.spread-right { padding:28px 24px; }
+.spread-gutter {
+  position:absolute; right:-1px; top:10%; bottom:10%;
+  width:2px;
+  background:repeating-linear-gradient(to bottom, var(--faint2) 0px, var(--faint2) 4px, transparent 4px, transparent 8px);
+}
+/* ruled lines on spread */
+.spread-left::before, .spread-right::before {
+  content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(transparent, transparent 27px, rgba(168,213,194,0.15) 27px, rgba(168,213,194,0.15) 28px);
+  pointer-events:none;
+}
+
+/* ──────────────────────────────────────
+   FINAL CODA
+────────────────────────────────────── */
+.coda {
+  padding:80px 40px;
+  text-align:center;
+  position:relative;
+}
+.coda-washi {
+  position:absolute; top:0; left:0; right:0; height:20px;
+  background:repeating-linear-gradient(90deg, var(--mint3) 0, var(--mint3) 40px, var(--yellow) 40px, var(--yellow) 80px, var(--peach) 80px, var(--peach) 120px, var(--lavender) 120px, var(--lavender) 160px, var(--rose) 160px, var(--rose) 200px, var(--blue) 200px, var(--blue) 240px);
+  opacity:0.55;
+}
+.coda-text {
+  font-family:'Caveat',cursive;
+  font-size:clamp(24px,4vw,40px);
+  line-height:1.5;
+  color:var(--ink);
+  max-width:480px;
+  margin:0 auto 20px;
+  position:relative; z-index:1;
+}
+.coda-text .m { color:var(--mint2); }
+.coda-ico { font-size:48px; margin:20px 0; display:block; }
+.coda-sub {
+  font-size:12px; color:var(--ink3); letter-spacing:0.1em;
+  font-family:'Noto Serif SC',serif; font-weight:300;
+}
+
+/* ──────────────────────────────────────
+   FOOTER
+────────────────────────────────────── */
+footer {
+  background:var(--page);
+  border-top:1px dashed var(--faint2);
+  padding:20px 40px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.f-brand {
+  font-family:'Caveat',cursive; font-weight:700; font-size:20px; color:var(--ink);
+  display:flex; align-items:center; gap:8px;
+}
+.f-info { font-size:11px; color:var(--ink3); }
+.f-hearts { font-size:16px; }
+
+/* ──────────────────────────────────────
+   ANIMATIONS
+────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hero-card  { animation: fadeUp 0.7s ease forwards; }
+.hero-card > * { animation: fadeUp 0.6s ease forwards; opacity:0; }
+.hero-date   { animation-delay:0.1s; }
+.hero-title  { animation-delay:0.25s; }
+.hero-sub    { animation-delay:0.4s; }
+.hero-tags   { animation-delay:0.5s; }
+.hero-stats  { animation-delay:0.6s; }
+
+@media(max-width:700px){
+  .wrap { padding:0 20px 60px; }
+  .memo-grid, .stat-grid, .collage, .spread, .dodont, .ann { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:1fr 1fr; }
+  .hero { padding:40px 20px; }
+  .hero-card { padding:32px 28px 28px; }
+  footer { flex-direction:column; gap:8px; padding:16px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="washi-top"></div>
+  <div class="corner-tape ct-tl"></div>
+  <div class="corner-tape ct-tr"></div>
+  <div class="corner-tape ct-bl"></div>
+  <div class="corner-tape ct-br"></div>
+
+  <!-- floating deco -->
+  <div class="deco d1">🌿</div>
+  <div class="deco d2">✿</div>
+  <div class="deco d3">🍃</div>
+  <div class="deco d4">🌸</div>
+  <div class="deco d5">⭐</div>
+  <div class="deco d6">🌙</div>
+  <div class="deco d7">☁️</div>
+  <div class="deco d8">🎀</div>
+
+  <div class="hero-card paper">
+    <div class="card-tape t1"></div>
+    <div class="card-tape t2"></div>
+    <div class="card-tape t3"></div>
+
+    <div class="hero-date">2025.03.14 · 晴天 ☀️</div>
+    <h1 class="hero-title">Petit<br><span class="mint">Journal</span><span class="peach"> ✿</span></h1>
+    <p class="hero-sub">手账设计系统 · 子弹笔记风格。清新、温柔、有点可爱，像一个用了很久的笔记本的气味。</p>
+    <div class="hero-tags">
+      <span class="htag m">🌿 薄荷绿</span>
+      <span class="htag p">🍑 蜜桃色</span>
+      <span class="htag l">💜 薰衣草</span>
+      <span class="htag y">🌼 奶油黄</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hs-item"><div class="hs-n">20</div><div class="hs-l">组件</div></div>
+      <div class="hs-item"><div class="hs-n">✦6</div><div class="hs-l">色彩</div></div>
+      <div class="hs-item"><div class="hs-n">v1</div><div class="hs-l">版本</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NAV (minimal, tape-style) ══ -->
+<div style="background:var(--page);border-bottom:1px dashed var(--faint2);padding:10px 40px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(61,53,48,0.05);">
+  <span style="font-family:'Caveat',cursive;font-weight:700;font-size:20px;color:var(--ink);">✿ Petit Journal</span>
+  <span style="font-size:9px;color:var(--ink3);letter-spacing:0.15em;text-transform:uppercase;">手账设计系统</span>
+  <div style="margin-left:auto;display:flex;gap:16px;font-family:'Caveat',cursive;font-size:15px;color:var(--ink3);">
+    <span>色彩</span><span>字体</span><span>组件</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ══ SECTION: SPIRIT ══ -->
+<div class="section-entry">
+  <div class="entry-date">chapter 01</div>
+  <h2 class="entry-title">精神<span class="accent">气质</span> 🌿</h2>
+  <p class="entry-body">这套风格想象的场景是：一个周日午后，一杯薄荷茶，一本用了半年的笔记本，上面贴着各种纸胶带和小贴纸，字迹有点歪但很认真。它不刻意"好看"，它只是真实地记录着某个人的日常——而这种真实感本身是最好看的东西。</p>
+  <p class="entry-body" style="margin-top:12px;">和前三套风格完全相反：没有强烈的立场，没有张力，没有权威感。它的核心是<strong>温柔</strong>——对使用者温柔，对内容温柔，对留白温柔。颜色不是"强调"，而是"心情"。</p>
+</div>
+
+<!-- ══ SECTION: COLOR ══ -->
+<div class="section-entry">
+  <div class="entry-date">chapter 02</div>
+  <h2 class="entry-title">色彩<span class="accent">系统</span> 🎨</h2>
+  <p class="entry-body" style="margin-bottom:28px;">整个色系以<strong>薄荷绿为核心</strong>，向外延展出几种柔和的马卡龙色调。没有纯黑，没有纯白——文字颜色是带暖调的深棕，背景是带米色的暖白，像真实纸张的颜色。所有颜色的饱和度都被刻意压低，它们应该和谐相处，而不是互相争抢。</p>
+
+  <div class="palette-grid">
+    <div class="swatch-item"><div class="sw-box" style="background:#a8d5c2;"></div><div class="sw-label">薄荷<br>#a8d5c2</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#f4c5a8;"></div><div class="sw-label">蜜桃<br>#f4c5a8</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#c9b8e8;"></div><div class="sw-label">薰衣草<br>#c9b8e8</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#f7e48a;"></div><div class="sw-label">奶油黄<br>#f7e48a</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#f4b8c8;"></div><div class="sw-label">玫瑰粉<br>#f4b8c8</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#a8c8f0;"></div><div class="sw-label">天空蓝<br>#a8c8f0</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#faf9f5;border:1px solid #e8e5de;"></div><div class="sw-label">暖白纸<br>#faf9f5</div></div>
+    <div class="swatch-item"><div class="sw-box" style="background:#3d3530;"></div><div class="sw-label">暖棕墨<br>#3d3530</div></div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-h">🌿 Color Tokens</div>
+    <div>--mint:    <span class="spec-v">#a8d5c2</span>  <span class="spec-dim">/* 主调，薄荷绿 */</span></div>
+    <div>--peach:   <span class="spec-v">#f4c5a8</span>  <span class="spec-dim">/* 蜜桃橙，第二暖色 */</span></div>
+    <div>--lavender:<span class="spec-v">#c9b8e8</span>  <span class="spec-dim">/* 薰衣草，冷紫 */</span></div>
+    <div>--yellow:  <span class="spec-v">#f7e48a</span>  <span class="spec-dim">/* 奶油黄，高光色 */</span></div>
+    <div>--page:    <span class="spec-v">#faf9f5</span>  <span class="spec-dim">/* 暖白纸色，主背景 */</span></div>
+    <div>--ink:     <span class="spec-v">#3d3530</span>  <span class="spec-dim">/* 暖棕墨，主文字 */</span></div>
+  </div>
+</div>
+
+<!-- ══ SECTION: COMPONENTS ══ -->
+<div class="section-entry" style="border-bottom:none;padding-bottom:0;">
+  <div class="entry-date">chapter 03</div>
+  <h2 class="entry-title">组件<span class="accent">词汇</span> 📖</h2>
+  <p class="entry-body">所有 20 个组件实际渲染，附使用说明。</p>
+</div>
+
+
+<!-- C01 WASHI TAPE -->
+<div class="comp">
+  <div class="comp-num">Component 01</div>
+  <h3><span class="ico">🎀</span> Washi Tape · 纸胶带</h3>
+  <p class="note">这是整套风格最核心的装饰语言。七种花色，每种都有不同的视觉质感，像真实的纸胶带一样有透明度。</p>
+
+  <div class="ex">横向装饰条（用于分割区域）</div>
+  <div class="washi w-mint" style="width:100%"></div>
+  <div class="washi w-peach" style="width:80%"></div>
+  <div class="washi w-lav" style="width:60%"></div>
+  <div class="washi w-yell" style="width:100%"></div>
+  <div class="washi w-stripe" style="width:70%"></div>
+  <div class="washi w-dots" style="width:50%"></div>
+  <div class="washi w-check" style="width:85%"></div>
+
+  <div class="ex">贴在卡片顶部（固定感）</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="background:var(--page);padding:24px;border-radius:4px;border:1px solid var(--faint2);position:relative;width:200px;box-shadow:2px 3px 0 var(--faint2);">
+      <div class="washi w-mint" style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:60px;border-radius:2px;"></div>
+      <div style="font-family:'Caveat',cursive;font-size:16px;color:var(--ink);margin-top:8px;">今日待办 📝</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:4px;">写完这份设计规范</div>
+    </div>
+    <div style="background:var(--page);padding:24px;border-radius:4px;border:1px solid var(--faint2);position:relative;width:200px;box-shadow:2px 3px 0 var(--faint2);">
+      <div class="washi w-peach" style="position:absolute;top:-8px;left:50%;transform:translateX(-50%) rotate(2deg);width:60px;border-radius:2px;"></div>
+      <div style="font-family:'Caveat',cursive;font-size:16px;color:var(--ink);margin-top:8px;">灵感记录 💡</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:4px;">交互的下一个形状</div>
+    </div>
+  </div>
+</div>
+
+<!-- C02 STICKER / BADGE -->
+<div class="comp">
+  <div class="comp-num">Component 02</div>
+  <h3><span class="ico">✨</span> Sticker · 小贴纸标签</h3>
+  <p class="note">手账里的标签系统。圆角胶囊形，带微阴影，像真实贴纸一样有轻微的立体感。</p>
+
+  <div class="ex">颜色变体（情绪标签）</div>
+  <div class="sticker-row">
+    <span class="sticker s-mint">🌿 清新</span>
+    <span class="sticker s-peach">🍑 温暖</span>
+    <span class="sticker s-lav">💜 宁静</span>
+    <span class="sticker s-yell">🌼 愉悦</span>
+    <span class="sticker s-rose">🌸 柔软</span>
+    <span class="sticker s-blue">☁️ 开阔</span>
+  </div>
+
+  <div class="ex">状态标签</div>
+  <div class="sticker-row">
+    <span class="sticker s-mint">✓ 完成</span>
+    <span class="sticker s-outline">进行中</span>
+    <span class="sticker s-solid">重要</span>
+    <span class="sticker s-stamp">📌 置顶</span>
+    <span class="sticker s-peach">⏰ 待做</span>
+    <span class="sticker s-lav">💭 想法</span>
+  </div>
+</div>
+
+<!-- C03 PULL QUOTE -->
+<div class="comp">
+  <div class="comp-num">Component 03</div>
+  <h3><span class="ico">💬</span> Pull Quote · 引言</h3>
+  <p class="note">薄荷绿背景卡片，装饰引号，带微阴影。小号版本用左侧绿色边框。</p>
+
+  <div class="ex">大引言卡片</div>
+  <div class="pq">
+    <blockquote>设计是一种温柔的主张——不是命令，而是邀请你一起看这个世界的某个角落。</blockquote>
+    <div class="pq-src">Petit Journal · 设计笔记</div>
+  </div>
+
+  <div class="ex">小号引言（正文插入）</div>
+  <div class="pq-sm">
+    <blockquote>留白不是"还没填"，而是让内容可以呼吸的空间。</blockquote>
+    <div class="src">手账哲学 · 2025</div>
+  </div>
+</div>
+
+<!-- C04 CALLOUT -->
+<div class="comp">
+  <div class="comp-num">Component 04</div>
+  <h3><span class="ico">📌</span> Callout · 便利贴提示</h3>
+  <p class="note">四种颜色，每种对应不同的情绪语义。带小图标，让提示框更友好。</p>
+
+  <div class="ex">薄荷绿 — 小贴士</div>
+  <div class="callout c-mint">
+    <div class="callout-ico">💡</div>
+    <div class="callout-body">
+      <div class="callout-t">小贴士</div>
+      <p>这套色系里，薄荷绿是核心调——其他所有颜色都和它和谐相处，不需要刻意搭配。</p>
+    </div>
+  </div>
+
+  <div class="ex">蜜桃色 — 注意</div>
+  <div class="callout c-peach">
+    <div class="callout-ico">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-t">注意一下</div>
+      <p>不要用饱和度过高的颜色替代这套柔和色调——高饱和会立刻破坏整体的温柔质感。</p>
+    </div>
+  </div>
+
+  <div class="ex">薰衣草 — 延伸阅读</div>
+  <div class="callout c-lav">
+    <div class="callout-ico">📖</div>
+    <div class="callout-body">
+      <div class="callout-t">延伸阅读</div>
+      <p>子弹笔记方法由 Ryder Carroll 创立，原版系统用极简的符号语言管理任务、事件和笔记。</p>
+    </div>
+  </div>
+
+  <div class="ex">奶油黄 — 灵感记录</div>
+  <div class="callout c-yell">
+    <div class="callout-ico">✨</div>
+    <div class="callout-body">
+      <div class="callout-t">灵感闪现</div>
+      <p>手账风格的数字界面，最难的不是"可爱"，而是"真实"——真实的手写感、真实的不完美、真实的温度。</p>
+    </div>
+  </div>
+</div>
+
+<!-- C05 MEMO CARDS -->
+<div class="comp">
+  <div class="comp-num">Component 05</div>
+  <h3><span class="ico">📋</span> Memo Card · 便利贴卡片</h3>
+  <p class="note">像真实便利贴一样的卡片，顶部有颜色条，轻微阴影。三列网格排布。</p>
+
+  <div class="memo-grid">
+    <div class="memo m-mint">
+      <span class="memo-icon">🌿</span>
+      <div class="memo-title">对话遗址</div>
+      <p class="memo-body">把思想的演化变成可挖掘的地层。定期让你看见自己的认知漂移。</p>
+    </div>
+    <div class="memo m-peach">
+      <span class="memo-icon">🔍</span>
+      <div class="memo-title">推理层界面</div>
+      <p class="memo-body">AI 的判断链条暴露给用户，人能在中间节点介入推理过程。</p>
+    </div>
+    <div class="memo m-lav">
+      <span class="memo-icon">🪞</span>
+      <div class="memo-title">依赖透明度</div>
+      <p class="memo-body">系统向你展示它在多大程度上替代了你的判断——不评判，只呈现。</p>
+    </div>
+    <div class="memo m-yell">
+      <span class="memo-icon">⏪</span>
+      <div class="memo-title">可逆性设计</div>
+      <p class="memo-body">把撤销从功能变成哲学。操作分叉，状态并行，时间可以穿越。</p>
+    </div>
+    <div class="memo m-rose">
+      <span class="memo-icon">🤝</span>
+      <div class="memo-title">意图协商</div>
+      <p class="memo-body">把"你想要什么"变成双向问题。系统帮你发现你自己都没意识到的意图。</p>
+    </div>
+    <div class="memo m-white">
+      <span class="memo-icon">＋</span>
+      <div class="memo-title" style="color:var(--ink3);">空白页</div>
+      <p class="memo-body" style="color:var(--ink3);">留给你自己的想法...</p>
+    </div>
+  </div>
+</div>
+
+<!-- C06 STAT CARDS -->
+<div class="comp">
+  <div class="comp-num">Component 06</div>
+  <h3><span class="ico">🔢</span> Stat Card · 数据卡片</h3>
+  <p class="note">数字用 Caveat 手写字体，圆角卡片，顶部细色条，带小图标。</p>
+
+  <div class="stat-grid">
+    <div class="stat-card s-mint"><span class="stat-ico">📝</span><div class="stat-n">20<span class="unit">个</span></div><div class="stat-l">组件数量</div></div>
+    <div class="stat-card s-peach"><span class="stat-ico">🎨</span><div class="stat-n">6<span class="unit">色</span></div><div class="stat-l">色彩系统</div></div>
+    <div class="stat-card s-lav"><span class="stat-ico">✍️</span><div class="stat-n">3<span class="unit">体</span></div><div class="stat-l">字体方案</div></div>
+    <div class="stat-card s-yell"><span class="stat-ico">⭐</span><div class="stat-n">∞<span class="unit"></span></div><div class="stat-l">可能性</div></div>
+  </div>
+</div>
+
+<!-- C07 DATA BARS -->
+<div class="comp">
+  <div class="comp-num">Component 07</div>
+  <h3><span class="ico">📊</span> Data Bar · 数据条</h3>
+  <p class="note">8px 高度，圆角，渐变填充。比前三套风格的极细线更友好、更有温度。</p>
+
+  <div class="dbars">
+    <div class="dbar"><div class="dbar-header"><span class="dbar-name">🌿 用户自主交互</span><span class="dbar-val">67%</span></div><div class="dbar-track"><div class="dbar-fill df-mint" style="width:67%"></div></div></div>
+    <div class="dbar"><div class="dbar-header"><span class="dbar-name">🍑 AI辅助决策</span><span class="dbar-val">48%</span></div><div class="dbar-track"><div class="dbar-fill df-peach" style="width:48%"></div></div></div>
+    <div class="dbar"><div class="dbar-header"><span class="dbar-name">💜 可逆操作比例</span><span class="dbar-val">31%</span></div><div class="dbar-track"><div class="dbar-fill df-lav" style="width:31%"></div></div></div>
+    <div class="dbar"><div class="dbar-header"><span class="dbar-name">🌼 推理层可见性</span><span class="dbar-val">12%</span></div><div class="dbar-track"><div class="dbar-fill df-yell" style="width:12%"></div></div></div>
+  </div>
+</div>
+
+<!-- C08 BULLET & CHECK LIST -->
+<div class="comp">
+  <div class="comp-num">Component 08</div>
+  <h3><span class="ico">✅</span> List · 子弹列表</h3>
+  <p class="note">两种变体：符号列表和复选框列表（最手账的核心功能）。</p>
+
+  <div class="ex">符号列表</div>
+  <ul class="blist">
+    <li><span class="bull">◆</span>界面不应该消失，而应该保持可见</li>
+    <li><span class="bull">◆</span>AI的响应不应该完美，而应该保留摩擦</li>
+    <li><span class="bull">◆</span>交互空间不应随时间单调收缩</li>
+  </ul>
+
+  <div class="ex">复选框（Bullet Journal 风格）</div>
+  <ul class="check-list">
+    <li><div class="cb done"></div><span>设计色彩系统 🎨</span></li>
+    <li><div class="cb done"></div><span>完成字体选择 ✍️</span></li>
+    <li><div class="cb"></div>绘制所有组件</li>
+    <li><div class="cb"></div>写完使用说明</li>
+    <li><div class="cb"></div>发布第一版 🚀</li>
+  </ul>
+</div>
+
+<!-- C09 TIMELINE -->
+<div class="comp">
+  <div class="comp-num">Component 09</div>
+  <h3><span class="ico">🗓️</span> Timeline · 时间线</h3>
+  <p class="note">虚线垂直轴，圆形薄荷绿节点，像手账里的日期记录。</p>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025.03</div>
+      <div class="tl-title">开始这个项目 🌱</div>
+      <div class="tl-body">在一个周日午后，突然想做一套真正好看的设计系统。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--peach2);box-shadow:0 0 0 2px var(--peach2);"></div>
+      <div class="tl-date">2025.06</div>
+      <div class="tl-title">完成四套风格 🎨</div>
+      <div class="tl-body">从严肃印刷到可爱手账，四种完全不同的设计语言。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--lav2);box-shadow:0 0 0 2px var(--lav2);"></div>
+      <div class="tl-date">未来某天</div>
+      <div class="tl-title">继续探索 ✨</div>
+      <div class="tl-body">设计语言是无限的，这里只是开始。</div>
+    </div>
+  </div>
+</div>
+
+<!-- C10 TABLE -->
+<div class="comp">
+  <div class="comp-num">Component 10</div>
+  <h3><span class="ico">📋</span> Table · 表格</h3>
+  <p class="note">薄荷绿表头线，虚线行分割，Caveat 字体标题。</p>
+
+  <table class="jtable">
+    <thead><tr>
+      <th>风格名称</th><th>底色</th><th>主调色</th><th>适合场景</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Editorial Ink</td><td>暖白纸色</td><td><span class="hi">砖红</span></td><td>报告、长文</td></tr>
+      <tr><td>Atelier Dark</td><td>深夜暖黑</td><td><span class="hi">琥珀金</span></td><td>作品集、工具</td></tr>
+      <tr><td>Brutalist Editorial</td><td>微暖白</td><td><span class="hi">暴力红</span></td><td>海报、展示</td></tr>
+      <tr><td>Petit Journal</td><td>暖白纸</td><td><span class="hi">薄荷绿</span></td><td>笔记、日常 🌿</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- C11 COLLAGE LAYOUT -->
+<div class="comp">
+  <div class="comp-num">Component 11</div>
+  <h3><span class="ico">🗂️</span> Collage Layout · 拼贴版式</h3>
+  <p class="note">手账最独特的版式——轻微旋转、胶带固定的卡片拼贴。两张卡片微倾，模拟真实的手账翻页感。</p>
+
+  <div class="collage">
+    <div class="collage-item rotated">
+      <div class="collage-tape" style="background:var(--mint3);" class="collage-tape ct-top"></div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:18px;color:var(--ink);margin-bottom:8px;">交互哲学笔记 📝</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">存在即交互，交互即存在。这不只是本体论命题，更是一个行动纲领——</div>
+      <div class="washi w-mint" style="margin-top:12px;height:10px;border-radius:2px;opacity:0.5;"></div>
+    </div>
+    <div class="collage-item rotated2">
+      <div style="position:absolute;top:-7px;left:50%;transform:translateX(-50%) rotate(1deg);width:48px;height:12px;background:var(--peach);opacity:0.65;border-radius:1px;"></div>
+      <div style="font-family:'Caveat',cursive;font-size:13px;color:var(--ink3);margin-bottom:6px;">2025.03.14</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:18px;color:var(--ink);margin-bottom:8px;">今日心情 ☀️</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">做了一件喜欢的事情，把设计语言变成了可以触摸的东西。</div>
+      <div style="margin-top:12px;display:flex;gap:6px;">
+        <span class="sticker s-mint" style="font-size:12px;padding:3px 10px;">开心</span>
+        <span class="sticker s-yell" style="font-size:12px;padding:3px 10px;">满足</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C12 SPREAD -->
+<div class="comp">
+  <div class="comp-num">Component 12</div>
+  <h3><span class="ico">📖</span> Journal Spread · 跨页展开</h3>
+  <p class="note">模拟真实手账的两页展开。中间装订线，横线纸背景，左右页各有内容区域。</p>
+
+  <div class="spread">
+    <div class="spread-left">
+      <div class="spread-gutter"></div>
+      <div style="font-family:'Caveat',cursive;font-size:13px;color:var(--ink3);margin-bottom:16px;">2025年 3月 ✦ 第12周</div>
+      <div style="font-family:'Caveat',cursive;font-weight:700;font-size:22px;color:var(--ink);margin-bottom:12px;position:relative;z-index:1;">本周目标 🎯</div>
+      <ul class="check-list" style="position:relative;z-index:1;">
+        <li><div class="cb done"></div><span>完成设计系统</span></li>
+        <li><div class="cb done"></div><span>写完四套风格</span></li>
+        <li><div class="cb"></div>下周整理归档</li>
+      </ul>
+      <div style="margin-top:20px;position:relative;z-index:1;">
+        <div class="washi w-stripe" style="height:10px;border-radius:2px;opacity:0.5;"></div>
+      </div>
+    </div>
+    <div class="spread-right">
+      <div style="font-family:'Caveat',cursive;font-size:13px;color:var(--ink3);margin-bottom:16px;">本周灵感 💭</div>
+      <div class="pq-sm" style="position:relative;z-index:1;">
+        <blockquote>设计语言是无限的，重要的是找到自己的那一种。</blockquote>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1;">
+        <span class="sticker s-mint">🌿 清新</span>
+        <span class="sticker s-peach">🍑 温暖</span>
+        <span class="sticker s-yell">🌼 创意</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C13 META ROW -->
+<div class="comp">
+  <div class="comp-num">Component 13</div>
+  <h3><span class="ico">🏷️</span> Meta Row & Byline · 元信息</h3>
+
+  <div class="ex">元信息行</div>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-k">📅 日期</div><div class="meta-v">2025.03.14</div></div>
+    <div class="meta-item"><div class="meta-k">⏱️ 时长</div><div class="meta-v">14min</div></div>
+    <div class="meta-item"><div class="meta-k">📝 字数</div><div class="meta-v">8,240</div></div>
+    <div class="meta-item"><div class="meta-k">🌿 心情</div><div class="meta-v" style="color:var(--mint2);">很好</div></div>
+  </div>
+
+  <div class="ex">作者卡</div>
+  <div class="byline">
+    <div class="byline-tape"></div>
+    <div class="byline-av">明</div>
+    <div>
+      <div class="byline-name">李明远 ✿</div>
+      <div class="byline-role">设计研究者 · 手账爱好者</div>
+      <div class="byline-bio">喜欢把复杂的想法装进简单的容器里。相信设计可以温柔地改变一点点什么。</div>
+    </div>
+  </div>
+</div>
+
+<!-- C14 TOC -->
+<div class="comp">
+  <div class="comp-num">Component 14</div>
+  <h3><span class="ico">📑</span> TOC · 目录</h3>
+  <p class="note">带薄荷绿表头的卡片式目录，hover 有浅绿背景。</p>
+
+  <div class="toc">
+    <div class="toc-header">📖 目录 · Contents</div>
+    <div class="toc-item"><span class="toc-n">01</span><span class="toc-title">精神气质 🌿</span><span class="toc-dots"></span><span class="toc-pg">04</span></div>
+    <div class="toc-item"><span class="toc-n">02</span><span class="toc-title">色彩系统 🎨</span><span class="toc-dots"></span><span class="toc-pg">10</span></div>
+    <div class="toc-item"><span class="toc-n">03</span><span class="toc-title">字体选择 ✍️</span><span class="toc-dots"></span><span class="toc-pg">16</span></div>
+    <div class="toc-item"><span class="toc-n">04</span><span class="toc-title">组件词汇 📋</span><span class="toc-dots"></span><span class="toc-pg">24</span></div>
+  </div>
+</div>
+
+<!-- C15 FIGURE -->
+<div class="comp">
+  <div class="comp-num">Component 15</div>
+  <h3><span class="ico">🖼️</span> Figure · 图片占位</h3>
+
+  <div class="fig-ph">
+    <div class="ico">📷</div>
+    <span>图片占位区 · Image Here</span>
+  </div>
+  <p class="fig-cap"><strong>图 1.1</strong>这里放一张照片或者插图——手账风格的界面里，图片应该像被贴进去的，而不是被嵌入的。</p>
+</div>
+
+<!-- C16 CHAPTER OPENER -->
+<div class="comp">
+  <div class="comp-num">Component 16</div>
+  <h3><span class="ico">📄</span> Chapter Opener · 章节开篇</h3>
+
+  <div class="ch-opener">
+    <div class="ch-opener-tape"></div>
+    <span class="ch-opener-ico">🌿</span>
+    <div class="ch-opener-label">第四章 · Chapter Four</div>
+    <div class="ch-opener-title">从描述到<span class="m">规范</span></div>
+    <p class="ch-opener-desc">宇宙本体论是描述性的，但应用本体论是规范性的。我们还需要回答：哪些交互模式是好的，哪些是对人有益的？</p>
+  </div>
+</div>
+
+<!-- C17 ANNOTATION -->
+<div class="comp">
+  <div class="comp-num">Component 17</div>
+  <h3><span class="ico">💭</span> Annotation · 边注</h3>
+
+  <div class="ann">
+    <div class="ann-body">
+      <p>交互本体并不是一次性设计完成的结构。它像是一条不断被踩踏的小路，最初只是草地上的痕迹，随着使用者的增加逐渐变得清晰。每一次版本更新都会留下新的分叉。</p>
+      <p>用户的行为反过来影响设计决策，而设计决策又重新塑造用户的行为习惯。</p>
+    </div>
+    <div class="ann-note">
+      <strong>💭 边注</strong>
+      这种主文+边注的排版方式，在手账里常见于"正文+自己的想法"的并行书写。
+    </div>
+  </div>
+</div>
+
+<!-- C18 FOOTNOTE + BREADCRUMB -->
+<div class="comp">
+  <div class="comp-num">Component 18</div>
+  <h3><span class="ico">📎</span> Footnote & Breadcrumb</h3>
+
+  <div class="ex">脚注</div>
+  <div class="fn">
+    <div class="fn-item"><span class="fn-n">1</span><span class="fn-t">普利高津的耗散结构理论：开放系统通过与外界的物质和能量交换来维持低熵状态。</span></div>
+    <div class="fn-item"><span class="fn-n">2</span><span class="fn-t">感觉剥夺实验证实，切断外界交互在 24–72 小时内会导致明显的认知扭曲。</span></div>
+  </div>
+
+  <div class="ex">面包屑路径</div>
+  <div class="bc">
+    <span>手账系统</span><span class="bc-sep">›</span>
+    <span>设计规范</span><span class="bc-sep">›</span>
+    <span class="bc-cur">组件词汇 ✿</span>
+  </div>
+</div>
+
+<!-- C19 SPEC BLOCK -->
+<div class="comp">
+  <div class="comp-num">Component 19</div>
+  <h3><span class="ico">💻</span> Spec Block · 代码规格</h3>
+  <p class="note">深色代码块，圆角，顶部标注 emoji。是这套风格里唯一带圆角的"技术区域"。</p>
+
+  <div class="spec">
+    <div class="spec-h">🌿 Typography</div>
+    <div>标题字体  : <span class="spec-v">Caveat 700</span>  <span class="spec-dim">/* 手写感，主标题 */</span></div>
+    <div>正文字体  : <span class="spec-v">Noto Serif SC 300</span>  <span class="spec-dim">/* 阅读节奏 */</span></div>
+    <div>UI字体    : <span class="spec-v">Noto Sans SC 400</span>  <span class="spec-dim">/* 界面标签 */</span></div>
+    <div>标题大小  : <span class="spec-v">clamp(32px, 5vw, 52px)</span></div>
+    <div>正文行高  : <span class="spec-v">1.85–1.9</span>  <span class="spec-dim">/* 宽松，让文字呼吸 */</span></div>
+    <div>圆角      : <span class="spec-v">4–8px</span>  <span class="spec-dim">/* 卡片/按钮可以有圆角 */</span></div>
+  </div>
+</div>
+
+<!-- C20 DO / DON'T -->
+<div class="comp" style="border-bottom:none;">
+  <div class="comp-num">Component 20</div>
+  <h3><span class="ico">💡</span> Do / Don't</h3>
+
+  <div class="dodont">
+    <div class="do">
+      <div class="do-l">✓ Do 这样做</div>
+      <ul>
+        <li>颜色保持低饱和度，像真实的水彩一样</li>
+        <li>Caveat 字体用于所有标题和数字——手写感是灵魂</li>
+        <li>保留圆角（4–8px）——这里不拒绝柔和</li>
+        <li>纸胶带用于分割区域或固定卡片</li>
+        <li>小 emoji 作为图标，让界面有表情</li>
+        <li>背景用点阵图案模拟笔记本页面</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <div class="dont-l">✗ Don't 避免这样</div>
+      <ul>
+        <li>不要用高饱和颜色——会破坏温柔质感</li>
+        <li>不要用纯黑或纯白——太硬，不像纸张</li>
+        <li>不要过度使用 emoji，点缀而非堆砌</li>
+        <li>不要让版面太"整齐"——轻微倾斜才有手工感</li>
+        <li>不要丢掉纸张感——背景线条和点阵是必须的</li>
+        <li>不要走极简路线——这套风格需要温柔的密度</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end wrap -->
+
+<!-- ══ CODA ══ -->
+<div class="coda">
+  <div class="coda-washi"></div>
+  <span class="coda-ico">🌿</span>
+  <p class="coda-text">
+    设计是一本手账——<br>
+    记录你<span class="m">真正在意</span>的东西。
+  </p>
+  <p class="coda-sub">Petit Journal · 手账设计系统 · 20 Components · v1.0 ✿</p>
+</div>
+
+<footer>
+  <div class="f-brand">✿ Petit Journal</div>
+  <div class="f-info">手账设计系统 · 薄荷绿系 · v1.0</div>
+  <div class="f-hearts">🌿 🍑 💜 🌼 🌸 ☁️</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — 设计风格规范 II</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #0a0a08;
+  --void2: #111110;
+  --void3: #1a1a17;
+  --surface: #1e1e1b;
+  --ash: #2e2e2a;
+  --mist: #9a9890;
+  --fog: #5a5855;
+  --paper: #f0ece0;
+  --paper2: #e8e3d4;
+  --gold: #d4a84b;
+  --gold2: #b8892e;
+  --lime: #c8d44b;
+  --rust: #c84b2e;
+  --rule-light: rgba(240,236,224,0.08);
+  --rule-mid: rgba(240,236,224,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--paper);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 300;
+  line-height: 1.8;
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ══ NAV ══ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--rule-light);
+  background: rgba(10,10,8,0.85);
+  backdrop-filter: blur(12px);
+}
+.nav-brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.nav-brand span { color: var(--gold); }
+.nav-items {
+  display: flex; gap: 32px; list-style: none;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 140px 48px 60px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+/* big background number */
+.hero-bg-text {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(200px, 28vw, 420px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240,236,224,0.06);
+  pointer-events: none;
+  letter-spacing: -0.05em;
+  user-select: none;
+}
+
+.hero-content { max-width: 760px; position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+}
+.hero-eyebrow-line { width: 48px; height: 1px; background: var(--gold); opacity: 0.5; }
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-size: clamp(52px, 8vw, 110px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: var(--paper);
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--void3);
+  -webkit-text-stroke: 1px rgba(240,236,224,0.3);
+  margin-bottom: 48px;
+}
+
+.hero-desc {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--mist);
+  max-width: 520px;
+  border-left: 2px solid var(--gold);
+  padding-left: 24px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--rule-light);
+  position: relative;
+  z-index: 2;
+}
+.hero-meta-item {}
+.hero-meta-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 4px;
+}
+.hero-meta-val {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--paper);
+}
+
+/* ══ LAYOUT ══ */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+/* ══ CHAPTER HEADER ══ */
+.ch {
+  padding: 88px 0 64px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.ch-num {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 12px;
+}
+.ch h2 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.05;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+.ch h2 em { font-style: italic; color: var(--gold); }
+.ch-rule { width: 40px; height: 2px; background: var(--gold); margin: 20px 0; }
+.ch p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--mist);
+  max-width: 640px;
+}
+
+/* ══ BODY TEXT ══ */
+.body-p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(240,236,224,0.75);
+  max-width: 640px;
+  margin-bottom: 20px;
+}
+.body-p strong { color: var(--paper); font-weight: 500; }
+
+/* ══ EX LABEL ══ */
+.ex {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin: 36px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ex::after { content:''; flex:1; height:1px; background:var(--rule-light); }
+
+/* ══ COMPONENT SECTION ══ */
+.comp-section {
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.comp-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 8px;
+}
+.comp-section h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+.comp-section > .note {
+  font-size: 13px;
+  color: var(--fog);
+  margin-bottom: 0;
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ══ COLOR SYSTEM ══ */
+.palette {
+  display: flex;
+  gap: 0;
+  height: 72px;
+  border: 1px solid var(--rule-light);
+  overflow: hidden;
+  margin: 20px 0 12px;
+}
+.palette-swatch { flex: 1; transition: flex 0.3s ease; cursor: default; }
+.palette-swatch:hover { flex: 2; }
+
+.palette-labels { display: flex; gap: 16px; flex-wrap: wrap; }
+.pl {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: 0.15em; color: var(--fog); text-transform: uppercase;
+}
+.pl-dot { width: 8px; height: 8px; flex-shrink: 0; }
+
+/* ══ SPEC BLOCK ══ */
+.spec {
+  background: var(--void2);
+  border: 1px solid var(--rule-light);
+  border-left: 2px solid var(--gold);
+  padding: 28px 32px;
+  margin: 24px 0;
+  font-family: 'Syne Mono', monospace;
+  font-size: 12px;
+  line-height: 2;
+}
+.spec-head {
+  font-size: 8px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.spec-line { color: rgba(240,236,224,0.6); }
+.spec-comment { color: var(--fog); }
+.spec-val { color: var(--paper); }
+
+/* ══ PULL QUOTE ══ */
+.pq {
+  padding: 40px 0;
+  margin: 32px 0;
+  border-top: 1px solid var(--rule-light);
+  border-bottom: 1px solid var(--rule-light);
+  position: relative;
+}
+.pq::before {
+  content: '\201C';
+  font-family: 'DM Serif Display', serif;
+  font-size: 120px;
+  line-height: 0.7;
+  color: var(--gold);
+  opacity: 0.15;
+  position: absolute;
+  top: 28px; left: -8px;
+  pointer-events: none;
+}
+.pq blockquote {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.35;
+  color: var(--paper);
+  font-style: italic;
+  max-width: 680px;
+  padding-left: 40px;
+}
+.pq-source {
+  padding-left: 40px;
+  margin-top: 20px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ══ STAT CARDS ══ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule-light);
+  border: 1px solid var(--rule-light);
+  margin: 20px 0 8px;
+}
+.stat-card {
+  background: var(--void2);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.stat-card:hover::after { transform: scaleX(1); }
+.stat-n {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--paper);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.stat-n sup { font-size: 20px; color: var(--gold); vertical-align: super; }
+.stat-d {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fog);
+  line-height: 1.6;
+}
+.stat-delta {
+  margin-top: 12px;
+  font-family: 'Syne Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+/* ══ BADGE / TAG ══ */
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.t {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+}
+.t-default { border: 1px solid var(--rule-mid); color: var(--fog); }
+.t-gold { border: 1px solid var(--gold); color: var(--gold); }
+.t-solid { background: var(--gold); color: var(--void); font-weight: 700; }
+.t-lime { border: 1px solid var(--lime); color: var(--lime); }
+.t-rust { border: 1px solid var(--rust); color: var(--rust); }
+.t-ghost { border: 1px solid var(--rule-mid); color: var(--paper); }
+.t-filled { background: var(--void3); border: 1px solid var(--ash); color: var(--mist); }
+
+/* ══ CALLOUT ══ */
+.callout {
+  padding: 24px 28px;
+  margin: 8px 0;
+  border: 1px solid var(--rule-light);
+  border-left: 3px solid var(--gold);
+  background: var(--void2);
+}
+.callout.c-lime { border-left-color: var(--lime); }
+.callout.c-rust { border-left-color: var(--rust); }
+.callout-t {
+  font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.callout.c-lime .callout-t { color: var(--lime); }
+.callout.c-rust .callout-t { color: var(--rust); }
+.callout p { font-size: 14px; line-height: 1.8; color: rgba(240,236,224,0.65); margin: 0; max-width: none; }
+
+/* ══ DARK FEATURE CARD ══ */
+.feature-card {
+  background: var(--void2);
+  border: 1px solid var(--rule-light);
+  padding: 40px 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.fc-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 80px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(212,168,75,0.2);
+  margin-bottom: 16px;
+  letter-spacing: -0.04em;
+}
+.fc-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--paper);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.fc-body { font-size: 13px; line-height: 1.8; color: var(--fog); max-width: none; }
+
+.feature-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--rule-light); border: 1px solid var(--rule-light); margin: 20px 0 8px; }
+.feature-grid-3 .feature-card { border: none; }
+
+/* ══ HORIZONTAL RULE ══ */
+.hr-gold { border: none; border-top: 1px solid rgba(212,168,75,0.3); margin: 28px 0; }
+.hr-thin  { border: none; border-top: 1px solid var(--rule-light); margin: 20px 0; }
+.hr-thick { border: none; border-top: 2px solid var(--paper); margin: 20px 0; opacity: 0.1; }
+.hr-accent { border: none; border-top: 2px solid var(--gold); width: 48px; margin: 20px 0; }
+.hr-label {
+  display: flex; align-items: center; gap: 16px;
+  font-family: 'Syne Mono', monospace; font-size: 9px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--fog);
+  margin: 20px 0;
+}
+.hr-label::before, .hr-label::after { content:''; flex:1; height:1px; background:var(--rule-light); }
+
+/* ══ LIST ══ */
+.styled-list { list-style: none; padding: 0; margin: 8px 0; }
+.styled-list li {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule-light);
+  font-size: 14px;
+  color: rgba(240,236,224,0.7);
+  line-height: 1.7;
+}
+.styled-list li:first-child { border-top: 1px solid var(--rule-light); }
+.ln {
+  font-family: 'Syne Mono', monospace;
+  font-size: 9px; color: var(--gold); min-width: 24px;
+  letter-spacing: 0.1em;
+}
+
+/* ══ TIMELINE ══ */
+.tl { position: relative; margin: 8px 0; }
+.tl::before { content:''; position:absolute; left:68px; top:0; bottom:0; width:1px; background:var(--rule-light); }
+.tl-item { display:grid; grid-template-columns:68px 1fr; gap:0 28px; padding-bottom:32px; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-yr {
+  font-family:'Syne Mono',monospace; font-size:10px; font-weight:700;
+  color:var(--fog); text-align:right; padding-right:20px; padding-top:2px;
+  position:relative; letter-spacing:0.05em;
+}
+.tl-yr::after { content:''; position:absolute; right:-5px; top:6px; width:9px; height:9px; border-radius:50%; background:var(--gold); }
+.tl-c h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:var(--paper); margin-bottom:4px; letter-spacing:-0.01em; }
+.tl-c p  { font-size:13px; color:var(--fog); line-height:1.7; margin:0; max-width:none; }
+
+/* ══ TABLE ══ */
+.t-table { width:100%; border-collapse:collapse; margin: 8px 0; }
+.t-table th {
+  font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.25em;
+  text-transform:uppercase; color:var(--fog); text-align:left;
+  padding:10px 16px; border-bottom:2px solid rgba(212,168,75,0.4);
+  font-weight:400;
+}
+.t-table td { font-size:13px; padding:12px 16px; border-bottom:1px solid var(--rule-light); color:rgba(240,236,224,0.7); vertical-align:top; line-height:1.7; }
+.t-table tr:last-child td { border-bottom:none; }
+.t-table td:first-child { color:var(--paper); font-weight:500; }
+.t-table .hi { color:var(--gold); font-family:'Syne Mono',monospace; font-size:11px; }
+.t-table .lo { color:var(--fog); font-family:'Syne Mono',monospace; font-size:11px; }
+
+/* ══ META ROW ══ */
+.meta {
+  display:flex; gap:40px; flex-wrap:wrap;
+  padding:16px 0; border-top:1px solid var(--rule-light); border-bottom:1px solid var(--rule-light);
+  margin: 8px 0;
+}
+.meta-k { font-family:'Syne Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--fog); margin-bottom:3px; }
+.meta-v { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; color:var(--paper); letter-spacing:0.05em; }
+
+/* ══ DATA BAR ══ */
+.dbars { margin: 8px 0; }
+.dbar-item { margin-bottom: 14px; }
+.dbar-header { display:flex; justify-content:space-between; margin-bottom:6px; }
+.dbar-name { font-size:13px; color:rgba(240,236,224,0.7); font-family:'Noto Sans SC',sans-serif; }
+.dbar-val { font-family:'Syne Mono',monospace; font-size:10px; color:var(--gold); }
+.dbar-track { height:1px; background:var(--rule-mid); position:relative; }
+.dbar-fill { height:1px; background:var(--gold); position:absolute; left:0; top:0; }
+.dbar-fill.f-lime { background:var(--lime); }
+.dbar-fill.f-mist { background:var(--mist); }
+
+/* ══ BYLINE CARD ══ */
+.byline {
+  display:flex; gap:24px; align-items:start;
+  padding:28px 28px; border:1px solid var(--rule-light); background:var(--void2);
+  margin: 8px 0;
+}
+.byline-av {
+  width:48px; height:48px; background:var(--gold); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Syne',sans-serif; font-weight:800; font-size:18px; color:var(--void);
+}
+.byline-name { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--paper); margin-bottom:2px; }
+.byline-role { font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.byline-bio { font-size:13px; color:var(--fog); line-height:1.7; }
+
+/* ══ TOC ══ */
+.toc { margin: 8px 0; }
+.toc-item {
+  display:flex; align-items:baseline; gap:0;
+  padding:12px 0; border-bottom:1px solid var(--rule-light);
+  font-size:14px; color:rgba(240,236,224,0.6);
+}
+.toc-n { font-family:'Syne Mono',monospace; font-size:9px; color:var(--gold); letter-spacing:0.1em; min-width:36px; }
+.toc-title { flex:1; color:rgba(240,236,224,0.75); }
+.toc-dots { flex:1; border-bottom:1px dotted rgba(240,236,224,0.1); margin:0 12px; position:relative; top:-3px; }
+.toc-pg { font-family:'Syne Mono',monospace; font-size:10px; color:var(--fog); }
+
+/* ══ FIGURE ══ */
+.fig-placeholder {
+  background:var(--void2); border:1px solid var(--rule-light);
+  height:180px; display:flex; align-items:center; justify-content:center;
+  font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.3em;
+  text-transform:uppercase; color:var(--fog);
+}
+.fig-caption { font-size:12px; color:var(--fog); line-height:1.7; margin-top:10px; }
+.fig-caption strong { font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-right:8px; }
+
+/* ══ FOOTNOTE ══ */
+.fn-block { border-top:1px solid var(--rule-light); padding-top:16px; margin: 8px 0; }
+.fn-item { display:flex; gap:14px; margin-bottom:12px; }
+.fn-n { font-family:'Syne Mono',monospace; font-size:10px; color:var(--gold); min-width:18px; padding-top:2px; }
+.fn-t { font-size:12px; color:var(--fog); line-height:1.8; }
+
+/* ══ KICKER variants ══ */
+.kicker {
+  font-family:'Syne Mono',monospace; font-size:10px; letter-spacing:0.3em;
+  text-transform:uppercase; color:var(--gold);
+  display:flex; align-items:center; gap:12px; margin-bottom:6px;
+}
+.kicker::before { content:''; display:block; width:32px; height:1px; background:var(--gold); opacity:0.6; }
+.kicker.bare::before { display:none; }
+.kicker.boxed { border:1px solid var(--gold); padding:5px 14px; display:inline-flex; }
+.kicker.boxed::before { display:none; }
+
+/* ══ SWATCH TABLE ══ */
+.swatches { display:flex; gap:0; margin:16px 0 20px; }
+.sw { flex:1; }
+.sw-box { height:56px; border-right:1px solid var(--void); }
+.sw:last-child .sw-box { border-right:none; }
+.sw-label { font-family:'Syne Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--fog); padding:6px 0 0; }
+
+/* ══ CHAPTER OPENER ══ */
+.ch-opener {
+  display:grid; grid-template-columns:auto 1fr; gap:0 32px; align-items:start;
+  padding:48px 0 40px; border-bottom:1px solid var(--rule-light); margin:8px 0;
+}
+.ch-opener-num {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:80px; line-height:1;
+  color:transparent; -webkit-text-stroke:1px rgba(212,168,75,0.3);
+  padding-right:32px; border-right:1px solid var(--rule-light); margin-right:0;
+}
+.ch-opener-body { padding-left:32px; }
+.ch-opener-label { font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:var(--fog); margin-bottom:10px; }
+.ch-opener-title { font-family:'DM Serif Display',serif; font-weight:400; font-size:32px; line-height:1.15; color:var(--paper); margin-bottom:10px; }
+.ch-opener-title em { font-style:italic; color:var(--gold); }
+.ch-opener-desc { font-size:14px; color:var(--fog); line-height:1.8; max-width:none; }
+
+/* ══ BREADCRUMB ══ */
+.breadcrumb {
+  font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.15em;
+  text-transform:uppercase; color:var(--fog); display:flex; align-items:center; gap:10px;
+  margin: 8px 0;
+}
+.breadcrumb-sep { color:var(--rule-mid); }
+.breadcrumb-current { color:var(--gold); }
+
+/* ══ ANNOTATION ══ */
+.ann-grid { display:grid; grid-template-columns:1fr 200px; gap:40px; margin:8px 0; }
+.ann-body p { font-size:14px; line-height:1.9; color:rgba(240,236,224,0.7); margin-bottom:14px; max-width:none; }
+.ann-note { font-size:12px; line-height:1.7; color:var(--fog); border-left:1px solid var(--rule-mid); padding-left:16px; }
+.ann-note strong { display:block; font-family:'Syne Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+
+/* ══ INLINE CODE ══ */
+code { font-family:'Syne Mono',monospace; font-size:12px; background:var(--void2); border:1px solid var(--rule-mid); padding:2px 7px; color:var(--gold); }
+
+/* ══ DO / DON'T ══ */
+.dodont { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule-light); border:1px solid var(--rule-light); margin:8px 0; }
+.do, .dont { background:var(--void2); padding:28px 28px; }
+.do-l { font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--lime); margin-bottom:14px; }
+.dont-l { font-family:'Syne Mono',monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--rust); margin-bottom:14px; }
+.do li, .dont li { font-size:13px; line-height:1.8; color:var(--fog); margin-left:16px; margin-bottom:6px; }
+
+/* ══ FINAL MANIFESTO ══ */
+.manifesto {
+  padding: 100px 0 80px;
+  text-align: center;
+  position: relative;
+}
+.manifesto::before {
+  content: 'ATELIER';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(80px, 15vw, 200px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240,236,224,0.03);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.manifesto p {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(20px, 3vw, 32px);
+  line-height: 1.5;
+  color: var(--paper);
+  max-width: 600px;
+  margin: 0 auto 16px;
+  position: relative;
+  z-index: 1;
+}
+.manifesto-sub {
+  font-family: 'Syne Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fog) !important;
+  font-style: normal !important;
+  margin-top: 32px !important;
+}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp 0.8s ease forwards; opacity:0; animation-delay:0.1s; }
+.hero h1      { animation: fadeUp 0.8s ease forwards; opacity:0; animation-delay:0.25s; }
+.hero-sub     { animation: fadeUp 0.8s ease forwards; opacity:0; animation-delay:0.4s; }
+.hero-desc    { animation: fadeUp 0.8s ease forwards; opacity:0; animation-delay:0.55s; }
+.hero-meta    { animation: fadeUp 0.8s ease forwards; opacity:0; animation-delay:0.7s; }
+
+/* ══ FOOTER ══ */
+footer {
+  border-top: 2px solid rgba(212,168,75,0.3);
+  padding: 28px 48px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+footer span {
+  font-family:'Syne Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--fog);
+}
+footer .f-brand { font-family:'Syne',sans-serif; font-weight:800; font-size:14px; color:var(--gold); letter-spacing:0.05em; }
+
+@media(max-width:800px){
+  nav { padding: 16px 24px; }
+  .nav-items { display:none; }
+  .hero { padding: 100px 24px 48px; }
+  .wrap { padding: 0 24px; }
+  .stat-grid, .feature-grid-3, .ann-grid, .dodont { grid-template-columns:1fr; }
+  footer { padding: 20px 24px; flex-direction:column; gap:8px; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Atelier<span>.</span></div>
+  <ul class="nav-items">
+    <li>Spirit</li>
+    <li>Color</li>
+    <li>Type</li>
+    <li>Components</li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">II</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      Design System No.2 · Atelier
+    </div>
+    <h1>工作室<br><em>美学</em></h1>
+    <div class="hero-sub">STUDIO DARK</div>
+    <p class="hero-desc">
+      深夜的工作室，一盏灯，几张草稿，一种对材质和密度的执念。这套风格的精神原型不是印刷品，而是艺术家的工作台——粗粝、精确、有温度，每一处细节都透露出被手动调整过的痕迹。
+    </p>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="hero-meta-label">风格编号</div><div class="hero-meta-val">ATELIER-II</div></div>
+    <div class="hero-meta-item"><div class="hero-meta-label">底色</div><div class="hero-meta-val">深夜黑</div></div>
+    <div class="hero-meta-item"><div class="hero-meta-label">强调色</div><div class="hero-meta-val">琥珀金</div></div>
+    <div class="hero-meta-item"><div class="hero-meta-label">字体对</div><div class="hero-meta-val">DM Serif × Syne</div></div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ── CHAPTER 01: SPIRIT ── -->
+  <div class="ch">
+    <div class="ch-num">Chapter 01</div>
+    <h2>精神气质<br><em>The Studio at Night</em></h2>
+    <div class="ch-rule"></div>
+    <p class="body-p">
+      这套风格想象的使用者是一个正在深夜工作的人。不是朝九晚五的职员，不是优化漏斗的产品经理，而是某个对自己在做的东西有强烈信念的人——设计师、艺术家、独立研究者、独立音乐人。
+    </p>
+    <p class="body-p">
+      它的色调来自工作室——<strong>深沉的暗底色</strong>，不是科技感的纯黑，而是带着微微暖调的近黑，像涂满黑色底漆的画布。唯一的强调色是<strong>琥珀金</strong>，不是柔软的黄色，而是带着铜器厚度的金——它出现的时候，你会感觉某个重要的东西被点亮了。
+    </p>
+
+    <div class="pq">
+      <blockquote>好的设计有一种沉默的自信——它不需要说服你，它只需要在那里。</blockquote>
+      <div class="pq-source">Studio Principle No.1</div>
+    </div>
+
+    <p class="body-p">与 Editorial Ink 的印刷比喻不同，Atelier 的比喻是<strong>手工品</strong>。每一条线都应该看起来像是被精确地画上去的，而不是被算法生成的。粗粝感和精确感可以共存——它们共同构成了"有人真的做过这个东西"的质感。</p>
+  </div>
+
+  <!-- ── CHAPTER 02: COLOR ── -->
+  <div class="ch">
+    <div class="ch-num">Chapter 02</div>
+    <h2>色彩系统<br><em>The Palette</em></h2>
+    <div class="ch-rule"></div>
+
+    <p class="body-p">整个色系以<strong>深夜工作室</strong>为喻。底色不是纯黑（那太冷），而是带有微暖调的近黑（#0a0a08）。层级通过几档深浅不同的近黑建立，不通过色相变化。</p>
+
+    <div class="palette">
+      <div class="palette-swatch" style="background:#0a0a08;" title="void"></div>
+      <div class="palette-swatch" style="background:#111110;" title="void2"></div>
+      <div class="palette-swatch" style="background:#1a1a17;" title="void3"></div>
+      <div class="palette-swatch" style="background:#1e1e1b;" title="surface"></div>
+      <div class="palette-swatch" style="background:#2e2e2a;" title="ash"></div>
+      <div class="palette-swatch" style="background:#5a5855;" title="fog"></div>
+      <div class="palette-swatch" style="background:#9a9890;" title="mist"></div>
+      <div class="palette-swatch" style="background:#f0ece0;" title="paper"></div>
+      <div class="palette-swatch" style="background:#d4a84b;" title="gold"></div>
+      <div class="palette-swatch" style="background:#c8d44b;" title="lime"></div>
+      <div class="palette-swatch" style="background:#c84b2e;" title="rust"></div>
+    </div>
+
+    <div class="swatches">
+      <div class="sw"><div class="sw-box" style="background:#0a0a08;"></div><div class="sw-label">--void<br>#0a0a08</div></div>
+      <div class="sw"><div class="sw-box" style="background:#1e1e1b;"></div><div class="sw-label">--surface<br>#1e1e1b</div></div>
+      <div class="sw"><div class="sw-box" style="background:#5a5855;"></div><div class="sw-label">--fog<br>#5a5855</div></div>
+      <div class="sw"><div class="sw-box" style="background:#9a9890;"></div><div class="sw-label">--mist<br>#9a9890</div></div>
+      <div class="sw"><div class="sw-box" style="background:#f0ece0;"></div><div class="sw-label">--paper<br>#f0ece0</div></div>
+      <div class="sw"><div class="sw-box" style="background:#d4a84b;"></div><div class="sw-label">--gold<br>#d4a84b</div></div>
+      <div class="sw"><div class="sw-box" style="background:#c8d44b;"></div><div class="sw-label">--lime<br>#c8d44b</div></div>
+      <div class="sw"><div class="sw-box" style="background:#c84b2e;"></div><div class="sw-label">--rust<br>#c84b2e</div></div>
+    </div>
+
+    <p class="body-p">
+      琥珀金是唯一的主强调色。<strong>黄绿（lime）和锈红（rust）</strong>作为辅助强调，只出现在需要区分状态类型时（如 callout 的不同语义）。三种强调色构成了一个视觉上有温度的系统，而不是冷硬的交通灯。
+    </p>
+
+    <div class="spec">
+      <div class="spec-head">Color Tokens</div>
+      <div class="spec-line">--void:    <span class="spec-val">#0a0a08</span>  <span class="spec-comment">/* 主背景，带暖调的深夜黑 */</span></div>
+      <div class="spec-line">--void2:   <span class="spec-val">#111110</span>  <span class="spec-comment">/* 卡片背景，比底色亮一档 */</span></div>
+      <div class="spec-line">--surface: <span class="spec-val">#1e1e1b</span>  <span class="spec-comment">/* 悬浮面、高亮背景 */</span></div>
+      <div class="spec-line">--fog:     <span class="spec-val">#5a5855</span>  <span class="spec-comment">/* 辅助文字、标签 */</span></div>
+      <div class="spec-line">--mist:    <span class="spec-val">#9a9890</span>  <span class="spec-comment">/* 正文文字 */</span></div>
+      <div class="spec-line">--paper:   <span class="spec-val">#f0ece0</span>  <span class="spec-comment">/* 标题、强调文字 */</span></div>
+      <div class="spec-line">--gold:    <span class="spec-val">#d4a84b</span>  <span class="spec-comment">/* 主强调色，琥珀金 */</span></div>
+      <div class="spec-line">--lime:    <span class="spec-val">#c8d44b</span>  <span class="spec-comment">/* 辅助强调，正向状态 */</span></div>
+      <div class="spec-line">--rust:    <span class="spec-val">#c84b2e</span>  <span class="spec-comment">/* 辅助强调，警告状态 */</span></div>
+    </div>
+  </div>
+
+  <!-- ── CHAPTER 03: TYPOGRAPHY ── -->
+  <div class="ch">
+    <div class="ch-num">Chapter 03</div>
+    <h2>字体系统<br><em>Two Voices</em></h2>
+    <div class="ch-rule"></div>
+
+    <p class="body-p">这套风格同样只用两种字体，但选择和 Editorial Ink 完全相反：<strong>衬线用 DM Serif Display</strong>，一款带有手工刻字感的展示衬线体，专用于大标题和引言；<strong>无衬线用 Syne</strong>，一款带有几何硬朗感的现代无衬线，用于所有 UI 文字、标题、标签。</p>
+
+    <p class="body-p"><strong>DM Serif Display</strong> 的斜体极其重要——它是整套系统里最有表达力的排版手段。当一个斜体字出现在粗体正体标题里，那种对比产生的张力是无法被替代的。字号越大，斜体越好看。</p>
+
+    <p class="body-p"><strong>Syne</strong> 的 ExtraBold（800）用于大号无衬线标题，它的字母形状带有一种轻微的手工变形感，不像 Helvetica 那样机械，也不像 Futura 那样几何纯粹，正好处在"工具感"和"人文感"之间。</p>
+
+    <div class="spec">
+      <div class="spec-head">Typography Scale</div>
+      <div class="spec-line">Hero 标题    : <span class="spec-val">DM Serif Display 400 italic · clamp(52px,8vw,110px) · lh 0.95</span></div>
+      <div class="spec-line">章节标题 h2  : <span class="spec-val">DM Serif Display 400 · clamp(32px,5vw,56px) · lh 1.05</span></div>
+      <div class="spec-line">UI 标题     : <span class="spec-val">Syne 700–800 · 18–24px · ls -0.01em</span></div>
+      <div class="spec-line">正文        : <span class="spec-val">Noto Sans SC 300 · 15px · lh 1.9</span></div>
+      <div class="spec-line">引言 blockquote : <span class="spec-val">DM Serif Display 400 italic · 22–34px · lh 1.35</span></div>
+      <div class="spec-line">标签/标记   : <span class="spec-val">Syne Mono 400 · 8–10px · ls 0.2–0.4em · uppercase</span></div>
+      <div class="spec-line">数字        : <span class="spec-val">Syne 800 · 按需 · ls -0.02em</span></div>
+    </div>
+  </div>
+
+  <!-- ── CHAPTER 04: COMPONENTS ── -->
+  <div class="ch" style="border-bottom:none; padding-bottom:0;">
+    <div class="ch-num">Chapter 04</div>
+    <h2>组件展示库<br><em>The Full Vocabulary</em></h2>
+    <div class="ch-rule"></div>
+    <p class="body-p">以下所有组件以实际渲染方式呈现，每个下方附有使用场景说明。</p>
+  </div>
+
+
+  <!-- C01 KICKER -->
+  <div class="comp-section">
+    <div class="comp-label">Component 01</div>
+    <h3>Kicker · 导读标签</h3>
+    <p class="note">标题前的内容类型标记。三种变体。</p>
+
+    <div class="ex">变体 A — 带线（默认）</div>
+    <div class="kicker">Studio Report</div>
+
+    <div class="ex">变体 B — 纯文字</div>
+    <div class="kicker bare">Analysis</div>
+
+    <div class="ex">变体 C — 带边框</div>
+    <div class="kicker boxed">Exclusive</div>
+  </div>
+
+  <!-- C02 BADGE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 02</div>
+    <h3>Badge · 状态徽章</h3>
+    <p class="note">标注分类、状态、版本。等宽字体，永远全大写，无圆角。</p>
+
+    <div class="ex">标准变体</div>
+    <div class="badge-row">
+      <span class="t t-default">Draft</span>
+      <span class="t t-ghost">Published</span>
+      <span class="t t-gold">New</span>
+      <span class="t t-solid">Featured</span>
+      <span class="t t-lime">Active</span>
+      <span class="t t-rust">Warning</span>
+      <span class="t t-filled">Archived</span>
+    </div>
+  </div>
+
+  <!-- C03 PULL QUOTE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 03</div>
+    <h3>Pull Quote · 引言</h3>
+    <p class="note">DM Serif Display 斜体，这是整套风格最有表达力的排版元素。</p>
+
+    <div class="ex">大引言</div>
+    <div class="pq">
+      <blockquote>每一处细节都应该看起来像是被手动调整过的，而不是算法生成的。</blockquote>
+      <div class="pq-source">Atelier · Design Principle</div>
+    </div>
+
+    <div class="ex">小引言（正文中插入）</div>
+    <div style="border-left:2px solid var(--gold);padding-left:24px;margin:8px 0;">
+      <p style="font-family:'DM Serif Display',serif;font-style:italic;font-size:19px;line-height:1.4;color:var(--paper);">粗粝感和精确感可以共存——它们共同构成了"有人真的做过这个东西"的质感。</p>
+    </div>
+  </div>
+
+  <!-- C04 CALLOUT -->
+  <div class="comp-section">
+    <div class="comp-label">Component 04</div>
+    <h3>Callout · 行内提示</h3>
+    <p class="note">三种语义：金（提示）/ 黄绿（成功/正向）/ 锈红（警告）。</p>
+
+    <div class="ex">金色 — 注意/提示</div>
+    <div class="callout">
+      <div class="callout-t">关键提示</div>
+      <p>这套风格的噪点纹理（grain overlay）是整体质感的重要组成部分。如果移除它，页面会显得过于干净，丢失"工作室"的触感。</p>
+    </div>
+
+    <div class="ex">黄绿 — 正向/成功</div>
+    <div class="callout c-lime">
+      <div class="callout-t">最佳实践</div>
+      <p>DM Serif Display 斜体适合任何需要"引言感"的场合——不只是正式的引言块，也可以用在章节标题的补充说明里。</p>
+    </div>
+
+    <div class="ex">锈红 — 警告/禁止</div>
+    <div class="callout c-rust">
+      <div class="callout-t">风格违禁</div>
+      <p>不要在这套风格里使用圆角。圆角会立刻破坏"工作台"的质感，让设计滑向科技产品的通用美学。</p>
+    </div>
+  </div>
+
+  <!-- C05 STAT CARDS -->
+  <div class="comp-section">
+    <div class="comp-label">Component 05</div>
+    <h3>Stat Card · 数据卡片</h3>
+    <p class="note">数字用 Syne 800，底部 hover 时出现金色细线。三列网格，1px 间隔线分割。</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-n">18<sup>×</sup></div>
+        <div class="stat-d">自反性交互<br>密度提升</div>
+        <div class="stat-delta">↑ 季度环比</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">73<sup>%</sup></div>
+        <div class="stat-d">用户依赖度<br>上升趋势</div>
+        <div class="stat-delta">+12pts · YoY</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">2.4<sup>s</sup></div>
+        <div class="stat-d">平均决策<br>介入时延</div>
+        <div class="stat-delta">↓ −0.3s vs 上期</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C06 DATA BARS -->
+  <div class="comp-section">
+    <div class="comp-label">Component 06</div>
+    <h3>Data Bar · 数据条</h3>
+    <p class="note">1px 高度的极简比例条。金色为主指标，其他颜色用于对比维度。</p>
+
+    <div class="dbars">
+      <div class="dbar-item">
+        <div class="dbar-header"><span class="dbar-name">用户自主交互比例</span><span class="dbar-val">67%</span></div>
+        <div class="dbar-track"><div class="dbar-fill" style="width:67%"></div></div>
+      </div>
+      <div class="dbar-item">
+        <div class="dbar-header"><span class="dbar-name">AI 辅助决策占比</span><span class="dbar-val">48%</span></div>
+        <div class="dbar-track"><div class="dbar-fill f-mist" style="width:48%"></div></div>
+      </div>
+      <div class="dbar-item">
+        <div class="dbar-header"><span class="dbar-name">可逆操作比例</span><span class="dbar-val">31%</span></div>
+        <div class="dbar-track"><div class="dbar-fill f-lime" style="width:31%"></div></div>
+      </div>
+      <div class="dbar-item">
+        <div class="dbar-header"><span class="dbar-name">推理层可见性得分</span><span class="dbar-val">12%</span></div>
+        <div class="dbar-track"><div class="dbar-fill" style="width:12%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C07 FEATURE GRID -->
+  <div class="comp-section">
+    <div class="comp-label">Component 07</div>
+    <h3>Feature Card · 特性卡片</h3>
+    <p class="note">大描边数字作为视觉锚，顶部金色细线渐变。三列网格，hover 时底部线条展开。</p>
+
+    <div class="feature-grid-3">
+      <div class="feature-card">
+        <div class="fc-num">01</div>
+        <div class="fc-title">对话遗址</div>
+        <p class="fc-body">把思想的演化变成可挖掘的地层。每次对话沉积下来，系统追踪认知的漂移轨迹。</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-num">02</div>
+        <div class="fc-title">推理层界面</div>
+        <p class="fc-body">AI 的判断链条暴露给用户，让人能在推理的中间节点注入新的前提。</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-num">03</div>
+        <div class="fc-title">依赖透明度</div>
+        <p class="fc-body">让系统向你展示它在多大程度上替代了你的判断。不评判，只呈现。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C08 LIST -->
+  <div class="comp-section">
+    <div class="comp-label">Component 08</div>
+    <h3>List · 列表</h3>
+    <p class="note">细线分隔，金色编号，无传统 bullet point。</p>
+
+    <ul class="styled-list">
+      <li><span class="ln">01</span>界面不应该消失，而应该保持可见——让人意识到自己正在被特定的语法塑造</li>
+      <li><span class="ln">02</span>AI 的响应不应该完美，而应该保留摩擦——迫使人反思自己的提问方式</li>
+      <li><span class="ln">03</span>交互空间不应随时间单调收缩，用户的熟练度应带来更多可能性而非更少选择</li>
+    </ul>
+  </div>
+
+  <!-- C09 TIMELINE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 09</div>
+    <h3>Timeline · 时间线</h3>
+    <p class="note">竖向时间轴，金色圆点节点，左侧淡线贯穿。</p>
+
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-yr">2025</div>
+        <div class="tl-c"><h4>操作预览标准化</h4><p>高影响操作在执行前提供完整预览，确认成为真实体验之后的选择。</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2027</div>
+        <div class="tl-c"><h4>推理层界面普及</h4><p>AI 判断链条向用户暴露，人开始能在中间节点介入推理过程。</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2029</div>
+        <div class="tl-c"><h4>认知漂移追踪成标配</h4><p>系统定期展示思想演化轨迹，"对话遗址"成为主流产品形态。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C10 TABLE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 10</div>
+    <h3>Table · 对比表格</h3>
+    <p class="note">表头用金色细线，数据行用极淡细线，无背景色块，无圆角。</p>
+
+    <table class="t-table">
+      <thead>
+        <tr>
+          <th>维度</th>
+          <th>Editorial Ink</th>
+          <th>Atelier Dark</th>
+          <th>场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>底色</td><td>暖白纸色</td><td>深夜暖黑</td><td>阅读 vs 沉浸</td></tr>
+        <tr><td>强调色</td><td><span class="hi">砖红</span></td><td><span class="hi">琥珀金</span></td><td>—</td></tr>
+        <tr><td>标题字体</td><td>Noto Serif SC</td><td>DM Serif Display</td><td>—</td></tr>
+        <tr><td>标签字体</td><td>Space Mono</td><td>Syne Mono</td><td>—</td></tr>
+        <tr><td>适用场景</td><td>报告、长文、文档</td><td>作品集、工具、展示</td><td>—</td></tr>
+        <tr><td>圆角</td><td><span class="lo">无</span></td><td><span class="lo">无</span></td><td>共同原则</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- C11 META & BYLINE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 11</div>
+    <h3>Meta Row & Byline · 元信息与作者卡</h3>
+
+    <div class="ex">元信息行</div>
+    <div class="meta">
+      <div><div class="meta-k">发布日期</div><div class="meta-v">2025.03</div></div>
+      <div><div class="meta-k">阅读时长</div><div class="meta-v">14 MIN</div></div>
+      <div><div class="meta-k">字数</div><div class="meta-v">7,840</div></div>
+      <div><div class="meta-k">版本</div><div class="meta-v">V2.0</div></div>
+    </div>
+
+    <div class="ex">作者卡</div>
+    <div class="byline">
+      <div class="byline-av">明</div>
+      <div>
+        <div class="byline-name">李明远</div>
+        <div class="byline-role">交互哲学研究者 · 独立设计师</div>
+        <div class="byline-bio">专注于人机关系的哲学基础研究，探索AI时代交互设计的伦理边界。现为独立研究者。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C12 TOC -->
+  <div class="comp-section">
+    <div class="comp-label">Component 12</div>
+    <h3>TOC · 目录</h3>
+    <p class="note">点线填充，章节编号金色，页码等宽字体灰色。</p>
+
+    <div class="toc">
+      <div class="toc-item"><span class="toc-n">01</span><span class="toc-title">精神气质</span><span class="toc-dots"></span><span class="toc-pg">04</span></div>
+      <div class="toc-item"><span class="toc-n">02</span><span class="toc-title">色彩系统</span><span class="toc-dots"></span><span class="toc-pg">10</span></div>
+      <div class="toc-item"><span class="toc-n">03</span><span class="toc-title">字体系统</span><span class="toc-dots"></span><span class="toc-pg">18</span></div>
+      <div class="toc-item"><span class="toc-n">04</span><span class="toc-title">组件展示库</span><span class="toc-dots"></span><span class="toc-pg">26</span></div>
+    </div>
+  </div>
+
+  <!-- C13 RULES -->
+  <div class="comp-section">
+    <div class="comp-label">Component 13</div>
+    <h3>Rule · 分割线</h3>
+    <p class="note">五种语义化分割线。注意：这里的"粗线"比 Editorial Ink 更轻，因为深色背景上的高对比线条会过于刺眼。</p>
+
+    <div class="ex">金色线 — 强调分割</div>
+    <hr class="hr-gold">
+    <div class="ex">极淡线 — 内容分割（最常用）</div>
+    <hr class="hr-thin">
+    <div class="ex">金色短线 — 装饰性锚点</div>
+    <hr class="hr-accent">
+    <div class="ex">带标签 — 跨章节过渡</div>
+    <div class="hr-label">第二部分 · Part Two</div>
+  </div>
+
+  <!-- C14 FIGURE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 14</div>
+    <h3>Figure · 图片与说明</h3>
+    <p class="note">图片占位用极暗背景，无阴影，无圆角。图注金色粗体图号 + 灰色说明文字。</p>
+
+    <div class="fig-placeholder">Image Placeholder · 图片占位</div>
+    <p class="fig-caption"><strong>Fig 1.1</strong>交互哲学框架下，用户与AI系统的存在性关系示意图。横轴为时间积分，纵轴为交互自由度指数 F(A)。</p>
+  </div>
+
+  <!-- C15 CHAPTER OPENER -->
+  <div class="comp-section">
+    <div class="comp-label">Component 15</div>
+    <h3>Chapter Opener · 章节开篇</h3>
+    <p class="note">描边大数字与标题并排，用竖线分隔左右区域。数字透明描边，避免喧宾夺主。</p>
+
+    <div class="ch-opener">
+      <div class="ch-opener-num">04</div>
+      <div class="ch-opener-body">
+        <div class="ch-opener-label">Chapter Four · 价值论基础</div>
+        <div class="ch-opener-title">从描述到<em>规范</em></div>
+        <p class="ch-opener-desc">宇宙本体论是描述性的，但应用本体论是规范性的。这个张力需要被明确处理——在承认"存在即交互"的同时，我们还需要回答：哪些交互模式是好的？</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C16 ANNOTATION -->
+  <div class="comp-section">
+    <div class="comp-label">Component 16</div>
+    <h3>Annotation · 边注</h3>
+    <p class="note">正文与边注不对称双栏。边注用细左边框区分，字号更小，颜色更暗。</p>
+
+    <div class="ann-grid">
+      <div class="ann-body">
+        <p>交互本体并不是一次性设计完成的结构。它像是一条不断被踩踏的小路，最初可能只是草地上的痕迹，随着使用者的增加逐渐变得清晰。每一次版本更新都会在这条路上留下新的分叉。</p>
+        <p>用户的行为反过来影响设计决策，而设计决策又重新塑造用户的行为习惯。</p>
+      </div>
+      <div class="ann-note">
+        <strong>边注 · Margin</strong>
+        这种不对称布局来自学术论文和法律文件的传统——主张在左宽栏，注释在右窄栏。在深色风格里，边注的存在感要进一步弱化。
+      </div>
+    </div>
+  </div>
+
+  <!-- C17 FOOTNOTE -->
+  <div class="comp-section">
+    <div class="comp-label">Component 17</div>
+    <h3>Footnote · 脚注</h3>
+
+    <div class="fn-block">
+      <div class="fn-item"><span class="fn-n">1</span><span class="fn-t">普利高津的耗散结构理论（1977）指出，开放系统通过与外界的物质和能量交换来维持低熵状态，这与本文"存在即动态维持"的论点高度契合。</span></div>
+      <div class="fn-item"><span class="fn-n">2</span><span class="fn-t">感觉剥夺实验（Sensory Deprivation）最早由 John Lilly 在 1954 年展开，后续研究证实切断交互在 24–72 小时内导致认知扭曲。</span></div>
+    </div>
+  </div>
+
+  <!-- C18 BREADCRUMB -->
+  <div class="comp-section">
+    <div class="comp-label">Component 18</div>
+    <h3>Breadcrumb · 路径导航</h3>
+
+    <div class="breadcrumb">
+      <span>工作室</span><span class="breadcrumb-sep">/</span>
+      <span>设计系统</span><span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">组件展示库</span>
+    </div>
+  </div>
+
+  <!-- C19 DO / DON'T -->
+  <div class="comp-section" style="border-bottom:none;">
+    <div class="comp-label">Component 19</div>
+    <h3>Do / Don't</h3>
+    <p class="note">黄绿为 Do，锈红为 Don't，与 callout 颜色语义保持一致。</p>
+
+    <div class="dodont">
+      <div class="do">
+        <div class="do-l">✓ Do</div>
+        <ul>
+          <li>DM Serif Display 斜体用于所有引言和章节副标题</li>
+          <li>噪点纹理 grain overlay 是必须保留的质感元素</li>
+          <li>强调色金色出现在关键信息：编号、线条、高亮</li>
+          <li>深色底色的层次通过近黑色阶建立，不用色相</li>
+          <li>数字用 Syne 800，负字间距 -0.02em</li>
+          <li>hover 动效只用 transform/opacity，不用颜色跳变</li>
+        </ul>
+      </div>
+      <div class="dont">
+        <div class="dont-l">✗ Don't</div>
+        <ul>
+          <li>不要用纯黑 (#000)，它比暖黑更冷、更死</li>
+          <li>不要给任何元素加圆角或 box-shadow</li>
+          <li>不要用蓝色、紫色、粉色作为强调色</li>
+          <li>不要让背景色超过 3–4 档——层次要靠透明度</li>
+          <li>不要在正文使用 DM Serif Display——它只属于标题</li>
+          <li>不要让金色出现在超过 20% 的页面面积上</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end wrap -->
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <p>好的设计有一种沉默的自信——<br>它不需要说服你，<br>它只需要在那里。</p>
+  <p class="manifesto-sub">Atelier · Studio Dark · 19 Components · v1.0</p>
+</div>
+
+<footer>
+  <span class="f-brand">Atelier.</span>
+  <span>Studio Dark Design System · v1.0</span>
+  <span>19 Components</span>
+</footer>
+
+</body>
+</html>

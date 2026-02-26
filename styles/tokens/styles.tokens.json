@@ -1,0 +1,186 @@
+{
+  "version": "1.0.0",
+  "schemaVersion": "1.0",
+  "styles": [
+    {
+      "id": "editorial-ink",
+      "displayName": "Editorial Ink",
+      "tone": "Editorial, restrained, content-first",
+      "source": {
+        "html": "styles/editorial-ink/index.html",
+        "guideline": "styles/editorial-ink/guideline-readme.md",
+        "skill": "skills/darwinui-style-editorial-ink/SKILL.md"
+      },
+      "tokens": {
+        "colors": {
+          "ink": "#0f0e0c",
+          "paper": "#f5f0e8",
+          "paper2": "#ede8dc",
+          "accent": "#c8391a",
+          "dim": "#7a7468",
+          "rule": "rgba(15,14,12,0.12)"
+        },
+        "typography": {
+          "display": "Noto Serif SC",
+          "body": "Noto Serif SC",
+          "mono": "Space Mono",
+          "ui": "Noto Sans SC"
+        },
+        "layout": {
+          "containerMaxWidth": "860px",
+          "bodyLineHeight": "1.9",
+          "sectionRhythm": "chapter-based"
+        }
+      },
+      "componentVocabulary": [
+        "kicker",
+        "lead",
+        "pull-quote",
+        "spec-block",
+        "stat-card",
+        "table",
+        "timeline"
+      ]
+    },
+    {
+      "id": "atelier",
+      "displayName": "Atelier",
+      "tone": "Premium dark studio storytelling",
+      "source": {
+        "html": "styles/atelier/index.html",
+        "guideline": "styles/atelier/guideline-readme.md",
+        "skill": "skills/darwinui-style-atelier/SKILL.md"
+      },
+      "tokens": {
+        "colors": {
+          "void": "#0a0a08",
+          "void2": "#111110",
+          "void3": "#1a1a17",
+          "paper": "#f0ece0",
+          "gold": "#d4a84b",
+          "gold2": "#b8892e",
+          "ruleLight": "rgba(240,236,224,0.08)"
+        },
+        "typography": {
+          "display": "DM Serif Display",
+          "heading": "Syne",
+          "mono": "Syne Mono",
+          "body": "Noto Sans SC"
+        },
+        "layout": {
+          "containerMaxWidth": "1100px",
+          "heroMode": "full-height narrative",
+          "sectionRhythm": "chapter-numbered"
+        }
+      },
+      "componentVocabulary": [
+        "hero",
+        "kicker",
+        "badge",
+        "feature-card",
+        "annotation",
+        "chapter-opener"
+      ]
+    },
+    {
+      "id": "brutalist",
+      "displayName": "Brutalist",
+      "tone": "Raw, high-contrast, grid collision",
+      "source": {
+        "html": "styles/brutalist/index.html",
+        "guideline": "styles/brutalist/guideline-readme.md",
+        "skill": "skills/darwinui-style-brutalist/SKILL.md"
+      },
+      "tokens": {
+        "colors": {
+          "white": "#f2f0eb",
+          "off": "#e8e5de",
+          "ink": "#0d0d0b",
+          "red": "#e3210a",
+          "rule": "rgba(13,13,11,0.12)"
+        },
+        "typography": {
+          "display": "Bebas Neue",
+          "mono": "IBM Plex Mono",
+          "body": "IBM Plex Sans",
+          "cjk": "Noto Sans SC"
+        },
+        "layout": {
+          "gridStyle": "hard segmented",
+          "borderWeight": "heavy",
+          "sectionRhythm": "collision modules"
+        }
+      },
+      "componentVocabulary": [
+        "ticker",
+        "number-grid",
+        "hard-border-card",
+        "stat-card",
+        "table",
+        "rule"
+      ]
+    },
+    {
+      "id": "journal",
+      "displayName": "Journal",
+      "tone": "Warm scrapbook with human touch",
+      "source": {
+        "html": "styles/journal/index.html",
+        "guideline": "styles/journal/guideline-readme.md",
+        "skill": "skills/darwinui-style-journal/SKILL.md"
+      },
+      "tokens": {
+        "colors": {
+          "page": "#faf9f5",
+          "page2": "#f3f1ea",
+          "mint": "#a8d5c2",
+          "peach": "#f4c5a8",
+          "lavender": "#c9b8e8",
+          "yellow": "#f7e48a",
+          "ink": "#3d3530"
+        },
+        "typography": {
+          "handwriting": "Caveat",
+          "altHandwriting": "Shadows Into Light",
+          "body": "Noto Sans SC",
+          "serif": "Noto Serif SC"
+        },
+        "layout": {
+          "backgroundPattern": "paper grid",
+          "moduleEdge": "soft rounded",
+          "sectionRhythm": "journal entries"
+        }
+      },
+      "componentVocabulary": [
+        "washi-tape",
+        "sticker",
+        "memo-card",
+        "collage-layout",
+        "journal-spread",
+        "callout"
+      ]
+    }
+  ],
+  "extensions": {
+    "requiredStyleFields": [
+      "id",
+      "displayName",
+      "tone",
+      "source",
+      "tokens",
+      "componentVocabulary"
+    ],
+    "requiredTokenSections": [
+      "colors",
+      "typography",
+      "layout"
+    ],
+    "addStyleChecklist": [
+      "Create styles/<new-style>/index.html",
+      "Create styles/<new-style>/guideline-readme.md",
+      "Create skills/darwinui-style-<new-style>/SKILL.md",
+      "Append new style entry in styles/tokens/styles.tokens.json",
+      "Update README style list and usage examples"
+    ]
+  }
+}

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计风格规范</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f0e8;
+    --paper2: #ede8dc;
+    --accent: #c8391a;
+    --dim: #7a7468;
+    --rule: rgba(15,14,12,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    line-height: 1.9;
+    font-size: 16px;
+  }
+  .masthead {
+    border-bottom: 3px solid var(--ink);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .masthead span {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 60px 100px; }
+
+  /* hero */
+  .doc-hero { padding: 72px 0 56px; border-bottom: 1px solid var(--rule); }
+  .doc-kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .doc-kicker::before { content:''; display:block; width:32px; height:1px; background:var(--accent); }
+  .doc-hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 54px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .doc-hero .lead {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #2a2820;
+    border-left: 3px solid var(--accent);
+    padding-left: 24px;
+    max-width: 640px;
+  }
+
+  /* chapter */
+  .chapter { padding: 56px 0 40px; border-bottom: 1px solid var(--rule); }
+  .ch-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .chapter h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .chapter h3 {
+    font-weight: 600;
+    font-size: 17px;
+    margin: 32px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .chapter p {
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: #1c1b18;
+    margin-bottom: 18px;
+    max-width: 720px;
+  }
+  .chapter p strong { font-weight: 600; color: var(--ink); }
+
+  /* spec block */
+  .spec-block {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 40px;
+    margin: 28px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  .spec-block .label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .spec-block .val { color: rgba(245,240,232,0.85); }
+  .spec-block .comment { color: rgba(245,240,232,0.4); }
+
+  /* example chip */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+  .chip {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid var(--rule);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--dim);
+    background: var(--paper2);
+  }
+  .chip.accent { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+  /* pull quote */
+  .pq {
+    margin: 36px 0;
+    padding-left: 36px;
+    border-left: 4px solid var(--accent);
+  }
+  .pq p {
+    font-size: 20px !important;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink) !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* color swatch */
+  .swatches { display: flex; gap: 12px; margin: 20px 0 28px; flex-wrap: wrap; }
+  .swatch { display: flex; flex-direction: column; gap: 8px; }
+  .swatch-box { width: 72px; height: 72px; border: 1px solid var(--rule); }
+  .swatch span {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    max-width: 80px;
+  }
+
+  /* do/dont */
+  .dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); margin: 28px 0; border: 1px solid var(--rule); }
+  .do, .dont { background: var(--paper); padding: 24px 28px; }
+  .do-label, .dont-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .do-label { color: #2a7a2a; }
+  .dont-label { color: var(--accent); }
+  .do li, .dont li { font-size: 14px; line-height: 1.8; color: var(--dim); margin-left: 18px; margin-bottom: 6px; }
+
+  footer {
+    border-top: 3px solid var(--ink);
+    padding: 22px 60px;
+    display: flex; justify-content: space-between;
+  }
+  footer span {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ── COMPONENT SHOWCASE STYLES ── */
+
+  /* section divider with label */
+  .showcase-section {
+    padding: 56px 0 16px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+  }
+  .showcase-section:last-child { border-bottom: none; }
+  .showcase-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .showcase-section h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .showcase-section > .desc {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 36px;
+    max-width: 600px;
+  }
+  .ex-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+  .ex-label:first-child { margin-top: 0; }
+
+  /* ── KICKER variants ── */
+  .kicker-demo {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 6px;
+  }
+  .kicker-demo::before { content:''; display:block; width:32px; height:1px; background:var(--accent); }
+  .kicker-demo.bare::before { display:none; }
+  .kicker-demo.boxed {
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    display: inline-flex;
+  }
+  .kicker-demo.boxed::before { display:none; }
+  .kicker-demo.dark-bg {
+    background: var(--ink);
+    color: var(--accent);
+    padding: 10px 16px;
+    display: inline-flex;
+  }
+  .kicker-demo.dark-bg::before { background: var(--accent); }
+
+  /* ── BADGE / TAG ── */
+  .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border: 1px solid var(--rule);
+    color: var(--dim);
+    background: var(--paper2);
+  }
+  .badge.b-accent { border-color: var(--accent); color: var(--accent); background: transparent; }
+  .badge.b-solid  { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .badge.b-outline { background: transparent; border-color: var(--ink); color: var(--ink); }
+  .badge.b-dot { display: flex; align-items: center; gap: 6px; }
+  .badge.b-dot::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+  /* ── STAT / NUMBER CARD ── */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 8px; }
+  .stat-item { background: var(--paper); padding: 28px 24px; }
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .stat-num span { font-size: 20px; color: var(--accent); }
+  .stat-desc { font-size: 12px; color: var(--dim); line-height: 1.6; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+  .stat-change { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.1em; margin-top: 8px; }
+
+  /* ── INLINE CALLOUT ── */
+  .callout {
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    margin-bottom: 8px;
+    background: var(--paper2);
+  }
+  .callout-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .callout p { font-size: 14px; line-height: 1.8; color: #2a2820; margin: 0; max-width: none; }
+  .callout.c-neutral { border-left-color: var(--dim); }
+  .callout.c-neutral .callout-title { color: var(--dim); }
+  .callout.c-dark { background: var(--ink); border-color: var(--ink); border-left-color: var(--accent); }
+  .callout.c-dark p { color: rgba(245,240,232,0.8); }
+  .callout.c-dark .callout-title { color: var(--accent); }
+
+  /* ── FOOTNOTE / ANNOTATION ── */
+  .footnote-block { border-top: 1px solid var(--rule); padding-top: 16px; margin-bottom: 8px; }
+  .footnote-item { display: flex; gap: 16px; margin-bottom: 12px; }
+  .fn-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 20px;
+    padding-top: 2px;
+  }
+  .fn-text { font-size: 13px; color: var(--dim); line-height: 1.8; }
+
+  /* ── INLINE QUOTE with attribution ── */
+  .attr-quote { margin-bottom: 8px; padding: 32px 40px; background: var(--paper2); border: 1px solid var(--rule); }
+  .attr-quote blockquote {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-style: normal;
+  }
+  .attr-quote blockquote::before { content: '\201C'; color: var(--accent); font-size: 28px; line-height: 0; vertical-align: -8px; margin-right: 2px; }
+  .attr-source { display: flex; align-items: center; gap: 12px; }
+  .attr-source::before { content:''; display:block; width:24px; height:1px; background:var(--dim); }
+  .attr-source span { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; }
+
+  /* ── LIST STYLES ── */
+  .styled-list { margin-bottom: 8px; }
+  .styled-list li {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #1c1b18;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .styled-list li:first-child { border-top: 1px solid var(--rule); }
+  .li-num { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); min-width: 24px; }
+  .styled-list.check li::before { content: '—'; color: var(--accent); min-width: 16px; }
+  .styled-list.check li { padding-left: 0; gap: 12px; list-style: none; }
+
+  /* ── HORIZONTAL RULE variants ── */
+  .rule-demos > * { margin-bottom: 20px; }
+  .rule-thick { border: none; border-top: 3px solid var(--ink); }
+  .rule-thin  { border: none; border-top: 1px solid var(--rule); }
+  .rule-accent { border: none; border-top: 2px solid var(--accent); width: 40px; }
+  .rule-dashed { border: none; border-top: 1px dashed rgba(15,14,12,0.25); }
+  .rule-with-label {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .rule-with-label::before, .rule-with-label::after { content:''; flex:1; height:1px; background:var(--rule); }
+
+  /* ── TWO-COL ASYMMETRIC ── */
+  .asym-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; margin-bottom: 8px; align-items: start; }
+  .asym-grid p { font-size: 15px; line-height: 1.9; color: #1c1b18; margin-bottom: 14px; max-width: none; }
+  .asym-aside {
+    background: var(--paper2);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    position: sticky; top: 80px;
+  }
+  .asym-aside-title { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .asym-aside p { font-size: 13px !important; color: var(--dim) !important; margin-bottom: 0 !important; }
+
+  /* ── TIMELINE ── */
+  .tl { position: relative; margin-bottom: 8px; }
+  .tl::before { content:''; position:absolute; left:72px; top:0; bottom:0; width:1px; background:var(--rule); }
+  .tl-item { display:grid; grid-template-columns:72px 1fr; gap:0 32px; padding-bottom:28px; }
+  .tl-item:last-child { padding-bottom:0; }
+  .tl-year {
+    font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
+    color: var(--dim); text-align: right; padding-right: 24px; padding-top: 3px;
+    position: relative;
+  }
+  .tl-year::after { content:''; position:absolute; right:-5px; top:7px; width:9px; height:9px; border-radius:50%; background:var(--accent); }
+  .tl-content h4 { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .tl-content p { font-size: 13px; color: var(--dim); line-height: 1.7; margin: 0; max-width: none; }
+
+  /* ── DARK CARD variants ── */
+  .dark-card { background: var(--ink); color: var(--paper); padding: 40px 44px; margin-bottom: 8px; position: relative; overflow: hidden; }
+  .dark-card::after { content:''; position:absolute; top:0; right:0; width:180px; height:180px; background:radial-gradient(circle at top right, rgba(200,57,26,0.25), transparent 70%); pointer-events:none; }
+  .dark-card .dc-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.35em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+  .dark-card h3 { font-weight:900; font-size:22px; line-height:1.3; margin-bottom:14px; }
+  .dark-card p { font-size:14px; line-height:1.85; color:rgba(245,240,232,0.75); max-width:none; margin-bottom:12px; }
+  .dark-card p:last-child { margin-bottom:0; }
+
+  .dark-card.dc-split { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+  .dark-card.dc-split .dc-left, .dark-card.dc-split .dc-right {}
+  .dark-card.dc-bordered { border: 1px solid rgba(245,240,232,0.15); }
+
+  /* ── METRIC / HIGHLIGHT BAR ── */
+  .metric-bar { display:flex; align-items:stretch; border:1px solid var(--rule); margin-bottom:8px; overflow:hidden; }
+  .metric-bar-accent { width:4px; background:var(--accent); flex-shrink:0; }
+  .metric-bar-body { padding:20px 24px; flex:1; }
+  .metric-bar-num { font-family:'Space Mono',monospace; font-size:32px; font-weight:700; line-height:1; margin-bottom:4px; }
+  .metric-bar-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); }
+
+  /* ── PROGRESS / DATA BAR ── */
+  .data-bars { margin-bottom:8px; }
+  .data-bar-item { margin-bottom:16px; }
+  .data-bar-header { display:flex; justify-content:space-between; margin-bottom:6px; }
+  .data-bar-name { font-size:13px; color:var(--ink); }
+  .data-bar-val { font-family:'Space Mono',monospace; font-size:11px; color:var(--accent); }
+  .data-bar-track { height:2px; background:var(--rule); position:relative; }
+  .data-bar-fill { height:2px; background:var(--ink); position:absolute; left:0; top:0; }
+  .data-bar-fill.f-accent { background:var(--accent); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table { width:100%; border-collapse:collapse; margin-bottom:8px; }
+  .compare-table th {
+    font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.25em; text-transform:uppercase;
+    color:var(--dim); text-align:left; padding:10px 16px; border-bottom:2px solid var(--ink);
+    font-weight:400;
+  }
+  .compare-table td { font-size:14px; padding:12px 16px; border-bottom:1px solid var(--rule); color:#1c1b18; vertical-align:top; line-height:1.7; }
+  .compare-table tr:last-child td { border-bottom:none; }
+  .compare-table td:first-child { font-weight:600; color:var(--ink); }
+  .compare-table .check-y { color:var(--accent); font-family:'Space Mono',monospace; font-size:11px; }
+  .compare-table .check-n { color:var(--dim); font-family:'Space Mono',monospace; font-size:11px; }
+
+  /* ── BREADCRUMB / NAV PATH ── */
+  .breadcrumb {
+    font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.15em;
+    text-transform:uppercase; color:var(--dim); display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .breadcrumb-sep { color:var(--rule); font-size:14px; }
+  .breadcrumb-current { color:var(--ink); }
+
+  /* ── ANNOTATION / MARGIN NOTE ── */
+  .marginal { display:grid; grid-template-columns:1fr 180px; gap:40px; margin-bottom:8px; align-items:start; }
+  .marginal-body p { font-size:15px; line-height:1.9; color:#1c1b18; max-width:none; margin-bottom:12px; }
+  .marginal-note {
+    font-size:12px; line-height:1.7; color:var(--dim);
+    border-left:2px solid var(--rule);
+    padding-left:14px;
+    position:sticky; top:80px;
+  }
+  .marginal-note strong { display:block; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+
+  /* ── INDEX / TOC ── */
+  .toc { margin-bottom:8px; }
+  .toc-item {
+    display:flex; align-items:baseline; gap:0;
+    padding:10px 0;
+    border-bottom:1px solid var(--rule);
+    font-size:14px;
+    cursor:default;
+  }
+  .toc-num { font-family:'Space Mono',monospace; font-size:9px; color:var(--accent); letter-spacing:0.1em; min-width:40px; }
+  .toc-title { flex:1; }
+  .toc-dots { flex:1; border-bottom:1px dotted rgba(15,14,12,0.2); margin:0 12px; position:relative; top:-4px; }
+  .toc-page { font-family:'Space Mono',monospace; font-size:10px; color:var(--dim); }
+
+  /* ── CAPTION ── */
+  .figure-block { margin-bottom:8px; }
+  .figure-placeholder {
+    background: var(--paper2);
+    border: 1px solid var(--rule);
+    height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim);
+    margin-bottom:10px;
+  }
+  .figure-caption { font-size:12px; color:var(--dim); line-height:1.7; }
+  .figure-caption strong { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink); margin-right:8px; }
+
+  /* ── AUTHOR / BYLINE CARD ── */
+  .byline-card { display:flex; gap:24px; align-items:start; padding:24px; border:1px solid var(--rule); background:var(--paper2); margin-bottom:8px; }
+  .byline-avatar { width:48px; height:48px; background:var(--ink); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Space Mono',monospace; font-size:16px; font-weight:700; color:var(--paper); }
+  .byline-info {}
+  .byline-name { font-weight:600; font-size:15px; margin-bottom:2px; }
+  .byline-role { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .byline-bio { font-size:13px; color:var(--dim); line-height:1.7; max-width:none; margin:0; }
+
+  /* ── READING TIME / META ROW ── */
+  .meta-row { display:flex; gap:28px; flex-wrap:wrap; margin-bottom:8px; padding:14px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+  .meta-item { display:flex; flex-direction:column; gap:3px; }
+  .meta-key { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--dim); }
+  .meta-val { font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--ink); }
+
+  /* ── INLINE CODE / TERM ── */
+  code {
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    background:var(--paper2);
+    border:1px solid var(--rule);
+    padding:2px 7px;
+    color:var(--accent);
+  }
+
+  /* ── CHAPTER OPENER ── */
+  .chapter-opener {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--rule);
+    display:grid; grid-template-columns:80px 1fr; gap:32px; align-items:start;
+    margin-bottom:8px;
+  }
+  .ch-opener-num {
+    font-family:'Space Mono',monospace; font-weight:700;
+    font-size:64px; line-height:1; color:var(--rule);
+    -webkit-text-stroke:1.5px var(--ink);
+  }
+  .ch-opener-content {}
+  .ch-opener-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; }
+  .ch-opener-title { font-weight:900; font-size:28px; letter-spacing:-0.02em; line-height:1.2; margin-bottom:10px; }
+  .ch-opener-desc { font-size:14px; color:var(--dim); line-height:1.8; max-width:none; margin:0; }
+
+  @media(max-width:700px){
+    .masthead, .wrap, footer { padding-left: 24px; padding-right: 24px; }
+    .doc-hero h1 { font-size: 36px; }
+    .dodont, .stat-row, .asym-grid, .dark-card.dc-split, .marginal { grid-template-columns: 1fr; }
+    .tl::before { left:56px; }
+    .tl-item { grid-template-columns:56px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <span>Design Style Specification</span>
+  <span>v2.0 · 2025</span>
+</header>
+
+<div class="wrap">
+
+  <div class="doc-hero">
+    <div class="doc-kicker">Style Guide</div>
+    <h1>设计风格规范<br>Editorial Ink</h1>
+    <p class="lead">这份规范描述一种以印刷报纸为精神原型的数字设计风格——克制、结构化、有文化厚度。它的核心不是"好看"，而是"有立场"。v2.0 新增完整组件展示库，每个组件均有实际渲染示例与使用说明。</p>
+  </div>
+
+
+  <!-- ① 精神气质 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 01</div>
+    <h2>精神气质</h2>
+
+    <p>这种风格的第一原则是：<strong>它看起来像是有人认真编辑过的东西</strong>。不是AI批量生成的内容，不是模板套出来的页面，而是某个有自己主张的人，花了时间，把文字和版面都当作值得对待的东西。</p>
+
+    <p>它的精神原型是二十世纪中叶的严肃印刷品——《纽约客》的长文排版、《The Economist》的克制封面、日本老式文艺杂志的纸张质感。这些东西的共同点不是华丽，而是<strong>密度与克制的平衡</strong>：信息量大，但从不喧嚣；有设计感，但设计不抢内容的戏。</p>
+
+    <p>这种风格适合承载有重量的内容——深度文章、研究报告、思想性产品。它天然排斥轻浮感，也排斥过度装饰。</p>
+
+    <div class="pq">
+      <p>设计不是让页面变漂亮，而是让内容的分量变得可见。</p>
+    </div>
+  </div>
+
+
+  <!-- ② 色彩 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 02</div>
+    <h2>色彩系统</h2>
+
+    <p>整个色系以<strong>纸色与墨色</strong>为基础，模拟真实印刷品的物理感受。背景不是纯白，而是带有微黄的暖白，像是放置了一段时间的质感纸张。文字不是纯黑，而是带有极细微暖调的深色。</p>
+
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-box" style="background:#f5f0e8;"></div><span>--paper<br>#f5f0e8<br>主背景</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:#ede8dc;"></div><span>--paper2<br>#ede8dc<br>副背景</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:#0f0e0c;"></div><span>--ink<br>#0f0e0c<br>主文字</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:#7a7468;"></div><span>--dim<br>#7a7468<br>辅助文字</span></div>
+      <div class="swatch"><div class="swatch-box" style="background:#c8391a;"></div><span>--accent<br>#c8391a<br>强调红</span></div>
+    </div>
+
+    <p>强调色只有一个，是<strong>砖红色</strong>（#c8391a）。它出现的位置高度克制：标签、装饰线、引用标记、重要边框。它的作用是在大面积中性色里制造视线的锚点，而不是制造装饰性的热闹。</p>
+
+    <p>这个调色板<strong>没有蓝色、没有渐变、没有阴影效果</strong>。所有的层次关系通过透明度和边框来建立，而不是通过颜色的跳跃。</p>
+
+    <div class="spec-block">
+      <div class="label">CSS Variables</div>
+      <div class="val">--paper:  #f5f0e8;  <span class="comment">/* 主背景，微黄暖白 */</span></div>
+      <div class="val">--paper2: #ede8dc;  <span class="comment">/* 副背景，稍深一档 */</span></div>
+      <div class="val">--ink:    #0f0e0c;  <span class="comment">/* 主文字，暖黑 */</span></div>
+      <div class="val">--dim:    #7a7468;  <span class="comment">/* 辅助文字，灰褐 */</span></div>
+      <div class="val">--accent: #c8391a;  <span class="comment">/* 唯一强调色，砖红 */</span></div>
+      <div class="val">--rule:   rgba(15,14,12,0.12); <span class="comment">/* 分割线，极淡 */</span></div>
+    </div>
+  </div>
+
+
+  <!-- ③ 字体 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 03</div>
+    <h2>字体系统</h2>
+
+    <p>整套字体方案使用<strong>两种字体，承担完全不同的角色</strong>，它们之间的对比越强烈，视觉秩序越清晰。</p>
+
+    <h3>正文与标题字体 — Noto Serif SC</h3>
+    <p>中英文正文和大标题都使用 <strong>Noto Serif SC</strong>（思源宋体）。衬线字体在大字号下有雕刻感，在小字号下有阅读节奏。字重使用的范围很宽：正文用 300（Light），层次说明用 400，小标题用 600，大标题用 900（Black）。这种字重的大跨度本身就是一种排版结构手段。</p>
+
+    <p>关键参数：正文 font-size 16–17px，line-height 1.9，这比常见网页行高更宽松，更接近纸质阅读的节奏。大标题 letter-spacing: -0.02em，即轻微负字间距，使标题在大字号下显得更紧密、更有力。</p>
+
+    <h3>标签与数据字体 — Space Mono</h3>
+    <p><strong>Space Mono</strong> 是一款等宽字体，专门用于所有非正文内容：导航标签、栏目标记、日期、数字、章节编号、所有大写英文标签。它的机械感和宋体的人文感形成强烈对比——这个对比是整个风格视觉张力的主要来源。</p>
+
+    <p>Space Mono 的使用规则：<strong>字号极小</strong>（9–11px），<strong>字间距极宽</strong>（letter-spacing: 0.2em–0.35em），<strong>必须全大写</strong>（text-transform: uppercase）。这三个条件缺一不可，否则等宽字体会显得笨重而非精致。</p>
+
+    <div class="spec-block">
+      <div class="label">Typography Scale</div>
+      <div class="val">大标题 (h1)      : Noto Serif SC 900, 42–78px, ls -0.02em</div>
+      <div class="val">章节标题 (h2)    : Noto Serif SC 900, 28–46px, ls -0.02em</div>
+      <div class="val">小标题 (h3)      : Noto Serif SC 600, 17px</div>
+      <div class="val">正文 (body)      : Noto Serif SC 300, 16–17px, lh 1.9</div>
+      <div class="val">导语 (lead)      : Noto Serif SC 300, 18–20px, lh 1.7</div>
+      <div class="val">标签/标记 (mono) : Space Mono 400, 9–11px, ls 0.2–0.35em, 全大写</div>
+      <div class="val">数字/数据 (mono) : Space Mono 700, 尺寸按需</div>
+    </div>
+  </div>
+
+
+  <!-- ④ 结构与间距 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 04</div>
+    <h2>结构与版式</h2>
+
+    <p>版式的骨架由<strong>线条而非色块</strong>建立。分割不同内容区域的方式是边框线，而不是背景色的变化。这套规则有两种边框：</p>
+
+    <p><strong>粗线</strong>（3px solid var(--ink)）：只用在页面的最顶层边界，比如 header 的底边、footer 的顶边。它是整个页面的"装订线"，代表结构性的硬边界。</p>
+
+    <p><strong>细线</strong>（1px solid var(--rule)）：用于内部章节的分割、侧边栏的边框、卡片的边缘。它极淡（rgba 12% 透明度），存在感微弱，目的是在不打扰阅读节奏的情况下，提示内容区域的切换。</p>
+
+    <h3>页边距与呼吸感</h3>
+    <p>水平内边距保持在 <strong>60px</strong>（移动端 24px），这比大多数网页更宽松，模拟的是杂志页面的白边。内容宽度不追求占满视口，正文列宽控制在 680px 左右——超过这个宽度，中文阅读的视线跳行负担会明显上升。</p>
+
+    <h3>章节间距的节律</h3>
+    <p>每个章节的上内边距约 64–72px，下内边距约 48–56px，章节之间用细线分隔。这个间距节律是故意设计的：它比普通网页宽松得多，让每个章节有充分的"呼吸"，页面滚动时有一种翻页的节奏感。</p>
+
+    <h3>双栏布局的使用规则</h3>
+    <p>双栏（grid-template-columns: 1fr 1fr）只在正文段落较短且两段内容平行对比时使用。它的目的不是节省空间，而是让读者的眼睛在两个视角之间自然游移。双栏的列间距保持 60px，不能更小，否则阅读时左右列会互相干扰。</p>
+
+    <div class="spec-block">
+      <div class="label">Layout Rules</div>
+      <div class="val">页面水平内边距    : 60px (移动端 24px)</div>
+      <div class="val">正文最大宽度      : 680px</div>
+      <div class="val">容器最大宽度      : 1200px (居中)</div>
+      <div class="val">章节上内边距      : 64–72px</div>
+      <div class="val">章节下内边距      : 48–56px</div>
+      <div class="val">双栏列间距        : 60px</div>
+      <div class="val">粗边框            : 3px solid var(--ink)</div>
+      <div class="val">细分割线          : 1px solid var(--rule)</div>
+    </div>
+  </div>
+
+
+  <!-- ⑤ 组件词汇 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 05</div>
+    <h2>核心组件词汇</h2>
+
+    <p>这套风格有一组固定的"词汇"——特定的排版组件，每种都有明确的使用语境。混用或滥用会破坏整体的阅读节奏。</p>
+
+    <h3>Kicker（导读标签）</h3>
+    <p>出现在大标题之前，Space Mono 小字，letter-spacing 极宽，砖红色，通常配一条短横线作为前缀。它是内容类型的标记，也是视线的引导——告诉读者"在读大标题之前，先在这里停一下"。</p>
+
+    <h3>Lead / Deck（导语）</h3>
+    <p>大标题下方的摘要段落。字号比正文大（18–20px），字重 300，左侧有 3px 砖红色粗边框。它是内容的预告，也是视觉上连接标题和正文的过渡元素。</p>
+
+    <h3>Pull Quote（引言）</h3>
+    <p>正文中提炼出的核心句子，字号 20–28px，字重 600，左侧 4px 砖红色边框。它的作用是打断正文的阅读节奏，制造一个视觉停顿点，让重要的句子有机会被单独记住。</p>
+
+    <h3>Dark Card（深色卡片）</h3>
+    <p>背景色使用 --ink（深色），文字使用 --paper（暖白色）。用于放置具体的叙事场景、案例故事、或需要视觉上与分析文字明确分离的内容。右上角可以加一个砖红色径向渐变光晕，制造细微的空间感。</p>
+
+    <h3>Feature Grid（功能网格）</h3>
+    <p>多个平行内容项的容器。用 1px 的 --rule 线作为格子的间隔（background: var(--rule); gap: 1px），而不是用 gap 留白。这种"印刷网格"的视觉感比普通卡片布局更有结构感。</p>
+
+    <h3>Spec Block（代码/规格块）</h3>
+    <p>深色背景，等宽字体，用于呈现精确的参数、代码、数值规范。这是整个风格里唯一"允许"出现技术感的组件。</p>
+
+    <div class="chips">
+      <span class="chip">Kicker 导读标签</span>
+      <span class="chip">Lead 导语</span>
+      <span class="chip">Pull Quote 引言</span>
+      <span class="chip accent">Dark Card 深色卡片</span>
+      <span class="chip">Feature Grid 功能网格</span>
+      <span class="chip">Spec Block 规格块</span>
+      <span class="chip">Timeline 时间线</span>
+      <span class="chip">Sidebar Note 侧边注</span>
+    </div>
+  </div>
+
+
+  <!-- ⑥ 动效 -->
+  <div class="chapter">
+    <div class="ch-label">Chapter 06</div>
+    <h2>动效原则</h2>
+
+    <p>这套风格的动效原则可以用一句话概括：<strong>只在内容出现的时刻有动效，其余时间页面是静止的</strong>。</p>
+
+    <p>进场动效使用 <code>fadeUp</code>——从透明度 0 到 1，同时从下方 24px 位移到原位。duration 约 0.6–0.8s，easing 用 ease 或 cubic-bezier 的缓出曲线。Hero 区域的各元素使用 animation-delay 实现错落出现（kicker → 标题 → 导语 → 署名），间隔约 0.1–0.15s。</p>
+
+    <p>除了进场，<strong>没有任何其他常规动效</strong>：没有视差滚动，没有悬停放大，没有持续的循环动画。这是故意的——印刷品的比喻要求页面在视觉上是稳定的，动效只出现在"内容第一次展现给你"的这个仪式性时刻。</p>
+
+    <div class="spec-block">
+      <div class="label">Animation Spec</div>
+      <div class="val">fadeUp: opacity 0→1, translateY 24px→0</div>
+      <div class="val">duration: 0.6–0.8s</div>
+      <div class="val">easing: ease (或 cubic-bezier(0.16, 1, 0.3, 1))</div>
+      <div class="val">stagger delay: 0.1–0.15s per element</div>
+      <div class="val">其他动效: 无</div>
+    </div>
+  </div>
+
+
+  <!-- ⑦ Do / Don't -->
+  <div class="chapter" style="border-bottom:none;">
+    <div class="ch-label">Chapter 07</div>
+    <h2>Do / Don't</h2>
+
+    <p>以下是这套风格最容易被破坏的地方，以及正确的处理方式。</p>
+
+    <div class="dodont">
+      <div class="do">
+        <div class="do-label">✓ Do</div>
+        <ul>
+          <li>强调色只用砖红，出现频率控制在每屏 3–5 处</li>
+          <li>Space Mono 标签必须全大写 + 极宽字间距</li>
+          <li>大标题使用负字间距（-0.02em）</li>
+          <li>正文行高保持 1.9，给中文足够呼吸空间</li>
+          <li>用线条而非色块来分割区域</li>
+          <li>深色卡片只用 --ink 底色，不用其他深色</li>
+          <li>图片、图表等视觉元素保持克制或不用</li>
+          <li>保持大量留白，让内容"呼吸"</li>
+        </ul>
+      </div>
+      <div class="dont">
+        <div class="dont-label">✗ Don't</div>
+        <ul>
+          <li>不要加蓝色、紫色、渐变或阴影</li>
+          <li>不要用 Inter、Roboto、系统字体</li>
+          <li>不要让页面背景是纯白 (#fff)</li>
+          <li>不要给按钮、卡片加圆角（border-radius）</li>
+          <li>不要用 box-shadow 制造悬浮感</li>
+          <li>不要使用持续性动画或视差效果</li>
+          <li>不要让正文宽度超过 700px</li>
+          <li>不要在非场景性内容上使用深色卡片</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pq" style="margin-top:48px;">
+      <p>每个设计决定都应该能回答：这让内容的分量更可见了，还是更稀薄了？</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 08 — COMPONENT LIBRARY
+══════════════════════════════════════════ -->
+<div style="border-top:3px solid var(--ink); margin-top:0;"></div>
+<div class="wrap" style="padding-top:0;">
+
+  <div style="padding:64px 0 40px; border-bottom:1px solid var(--rule);">
+    <div class="ch-label">Chapter 08</div>
+    <h2 style="font-family:'Noto Serif SC',serif;font-weight:900;font-size:36px;letter-spacing:-0.02em;margin-bottom:16px;">组件展示库</h2>
+    <p style="font-size:16px;color:var(--dim);line-height:1.8;max-width:640px;margin:0;">以下所有组件均以实际渲染方式呈现，每个组件下方附有使用说明。这是这套风格语言的完整词汇表。</p>
+  </div>
+
+
+  <!-- ① KICKER VARIANTS -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 01</div>
+    <h2>Kicker · 导读标签</h2>
+    <p class="desc">出现在标题前，标记内容类型。三种变体适应不同层级的内容场景。</p>
+
+    <div class="ex-label">变体 A — 带前缀线（最常用）</div>
+    <div class="kicker-demo">Feature Report</div>
+
+    <div class="ex-label">变体 B — 纯文字（简洁场景）</div>
+    <div class="kicker-demo bare">Analysis</div>
+
+    <div class="ex-label">变体 C — 带边框（强调场景）</div>
+    <div class="kicker-demo boxed">Breaking</div>
+
+    <div class="ex-label">变体 D — 深色背景（用于 Hero 区域）</div>
+    <div style="background:var(--ink);padding:20px 24px;display:inline-block;margin-bottom:8px;">
+      <div class="kicker-demo dark-bg">Exclusive</div>
+    </div>
+
+    <div class="spec-block" style="margin-top:20px;">
+      <div class="label">Kicker Spec</div>
+      <div class="val">font: Space Mono 400 · 10px · ls 0.3em · uppercase</div>
+      <div class="val">color: var(--accent)</div>
+      <div class="val">prefix line: width 32px · height 1px · background accent</div>
+    </div>
+  </div>
+
+
+  <!-- ② BADGES -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 02</div>
+    <h2>Badge · 标签徽章</h2>
+    <p class="desc">用于标注状态、分类、版本等元信息。永远小字、全大写、无圆角。</p>
+
+    <div class="ex-label">标准变体</div>
+    <div class="badge-row">
+      <span class="badge">Draft</span>
+      <span class="badge">Published</span>
+      <span class="badge">Archived</span>
+      <span class="badge b-accent">New</span>
+      <span class="badge b-solid">Featured</span>
+      <span class="badge b-outline">Open</span>
+      <span class="badge b-dot">Live</span>
+    </div>
+
+    <div class="ex-label">深色背景上的徽章</div>
+    <div style="background:var(--ink);padding:20px 24px;display:flex;gap:10px;flex-wrap:wrap;">
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 14px;border:1px solid rgba(245,240,232,0.2);color:rgba(245,240,232,0.6);">Vol. 12</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 14px;border:1px solid var(--accent);color:var(--accent);">Breaking</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;padding:5px 14px;background:var(--accent);color:var(--paper);">Exclusive</span>
+    </div>
+  </div>
+
+
+  <!-- ③ PULL QUOTE variants -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 03</div>
+    <h2>Pull Quote · 引言</h2>
+    <p class="desc">打断正文节奏的视觉停顿点。三种层级对应不同的引言分量。</p>
+
+    <div class="ex-label">层级 1 — 大引言（最重要的句子）</div>
+    <div class="pq" style="margin-bottom:24px;">
+      <p style="font-size:24px!important;">设计不是让页面变漂亮，而是让内容的分量变得可见。</p>
+    </div>
+
+    <div class="ex-label">层级 2 — 标准引言</div>
+    <div class="pq" style="margin-bottom:24px;">
+      <p>效率是上个时代的稀缺资源。自我意识，是下一个时代的稀缺资源。</p>
+    </div>
+
+    <div class="ex-label">层级 3 — 带归属的引言</div>
+    <div class="attr-quote">
+      <blockquote>界面亮起，响应返回，时间继续向前。人在其中停顿了一下——这个停顿，就是意义发生的地方。</blockquote>
+      <div class="attr-source"><span>交互哲学 · 第二部分</span></div>
+    </div>
+  </div>
+
+
+  <!-- ④ CALLOUT -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 04</div>
+    <h2>Callout · 行内提示块</h2>
+    <p class="desc">嵌入正文的小型信息块，用于注意事项、补充说明、警告。左侧边框是唯一的视觉强调手段。</p>
+
+    <div class="ex-label">强调型（默认）</div>
+    <div class="callout">
+      <div class="callout-title">注意</div>
+      <p>这套色彩系统只有在背景使用暖白（#f5f0e8）的情况下才能正常工作。如果背景改为纯白，整个色调的印刷感会立刻消失。</p>
+    </div>
+
+    <div class="ex-label">中性型</div>
+    <div class="callout c-neutral">
+      <div class="callout-title">说明</div>
+      <p>Space Mono 字体需要从 Google Fonts 加载，首次渲染可能有轻微延迟。建议在 &lt;head&gt; 中提前预连接。</p>
+    </div>
+
+    <div class="ex-label">深色型</div>
+    <div class="callout c-dark">
+      <div class="callout-title">核心原则</div>
+      <p>用线条分割区域，而不是用背景色的变化。所有层次关系通过边框透明度来建立。</p>
+    </div>
+  </div>
+
+
+  <!-- ⑤ STAT CARDS -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 05</div>
+    <h2>Stat Card · 数据卡片</h2>
+    <p class="desc">展示关键数字。数字用 Space Mono 粗体，单位用砖红色，描述用极小字全大写。</p>
+
+    <div class="ex-label">三列网格（标准）</div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">73<span>%</span></div>
+        <div class="stat-desc">用户依赖度<br>上升趋势</div>
+        <div class="stat-change">↑ +12 pts / 季度</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2.4<span>s</span></div>
+        <div class="stat-desc">平均决策<br>介入时延</div>
+        <div class="stat-change">↓ -0.3s vs 上期</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">18<span>×</span></div>
+        <div class="stat-desc">自反性交互<br>密度提升</div>
+        <div class="stat-change">— 持平</div>
+      </div>
+    </div>
+
+    <div class="ex-label">带左边框的单行指标</div>
+    <div class="metric-bar">
+      <div class="metric-bar-accent"></div>
+      <div class="metric-bar-body">
+        <div class="metric-bar-num">4,821</div>
+        <div class="metric-bar-label">本月交互节点数 · 环比 +23%</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑥ DATA BARS -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 06</div>
+    <h2>Data Bar · 数据条</h2>
+    <p class="desc">极简的横向条形图替代方案。不用图表库，只用 2px 高的细线表达比例关系。</p>
+
+    <div class="data-bars">
+      <div class="data-bar-item">
+        <div class="data-bar-header"><span class="data-bar-name">用户自主交互</span><span class="data-bar-val">67%</span></div>
+        <div class="data-bar-track"><div class="data-bar-fill f-accent" style="width:67%"></div></div>
+      </div>
+      <div class="data-bar-item">
+        <div class="data-bar-header"><span class="data-bar-name">AI 辅助决策</span><span class="data-bar-val">48%</span></div>
+        <div class="data-bar-track"><div class="data-bar-fill" style="width:48%"></div></div>
+      </div>
+      <div class="data-bar-item">
+        <div class="data-bar-header"><span class="data-bar-name">可逆操作比例</span><span class="data-bar-val">31%</span></div>
+        <div class="data-bar-track"><div class="data-bar-fill" style="width:31%"></div></div>
+      </div>
+      <div class="data-bar-item">
+        <div class="data-bar-header"><span class="data-bar-name">推理层可见性</span><span class="data-bar-val">12%</span></div>
+        <div class="data-bar-track"><div class="data-bar-fill f-accent" style="width:12%"></div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑦ DARK CARD VARIANTS -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 07</div>
+    <h2>Dark Card · 深色卡片</h2>
+    <p class="desc">深色背景只用于叙事场景、案例故事、或需要与分析文字明确分离的内容。三种布局变体。</p>
+
+    <div class="ex-label">变体 A — 标准叙事卡</div>
+    <div class="dark-card">
+      <div class="dc-label">场景想象</div>
+      <h3>一个编辑在写作助手里看到的镜子</h3>
+      <p>张明是一位编辑，使用AI写作助手已经两年。今天系统给他展示了他从没看过的视图：过去六个月的写作行为地图。</p>
+      <p>蓝色是他自主输入的文字，橙色是他直接采用了AI建议的部分。他看到一个让他不安的图案。</p>
+    </div>
+
+    <div class="ex-label">变体 B — 双栏分割卡</div>
+    <div class="dark-card dc-split dc-bordered">
+      <div class="dc-left">
+        <div class="dc-label">问题</div>
+        <h3 style="font-size:18px;">当界面消失，人也消失了吗？</h3>
+        <p>无摩擦设计的终极目标是让界面隐形——但这也意味着用户对自身行为的意识在消退。</p>
+      </div>
+      <div class="dc-right">
+        <div class="dc-label">回应</div>
+        <h3 style="font-size:18px;">让界面保持可见</h3>
+        <p>好的系统不应该消失，而应该在关键时刻主动出现，提醒人"你正在被塑造"。</p>
+      </div>
+    </div>
+
+    <div class="ex-label">变体 C — 简洁数字引用卡</div>
+    <div class="dark-card" style="padding:32px 40px;display:flex;align-items:center;gap:40px;">
+      <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:72px;line-height:1;color:rgba(245,240,232,0.1);-webkit-text-stroke:1px var(--accent);white-space:nowrap;flex-shrink:0;">05</div>
+      <div>
+        <div class="dc-label">核心范式</div>
+        <p style="font-size:18px;font-weight:600;color:var(--paper);margin:0;">依赖透明度界面——让系统向你展示它在多大程度上替代了你的判断。</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑧ LIST STYLES -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 08</div>
+    <h2>List · 列表样式</h2>
+    <p class="desc">这套风格不使用传统的 bullet point。所有列表用细线分隔，配合编号或破折号。</p>
+
+    <div class="ex-label">编号列表（有序内容）</div>
+    <ol class="styled-list" style="list-style:none;padding:0;">
+      <li><span class="li-num">01</span>交互是属性的发放者，没有交互就没有可描述的存在</li>
+      <li><span class="li-num">02</span>所有观测都是能量或信息的交换，感知是存在的直接验证路径</li>
+      <li><span class="li-num">03</span>存在不是静态的拥有，而是动态的维持——交互停止即是本体论意义上的死亡</li>
+    </ol>
+
+    <div class="ex-label">破折号列表（并列内容）</div>
+    <ul class="styled-list check" style="padding:0;">
+      <li>保留犹豫、错误、反复的权利</li>
+      <li>让人在与机器的共舞中仍然能够保持自反性存在</li>
+      <li>设计的任务是照亮不可逆，而不是消灭它</li>
+    </ul>
+  </div>
+
+
+  <!-- ⑨ TIMELINE -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 09</div>
+    <h2>Timeline · 时间线</h2>
+    <p class="desc">用于演化路径、历史节点、发展预测。年份用 Space Mono，配砖红色圆点作为节点标记。</p>
+
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-content"><h4>操作预览标准化</h4><p>高影响操作在执行前提供完整预览，确认不再是弹窗，而是真实体验之后的选择。</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026</div>
+        <div class="tl-content"><h4>推理层界面普及</h4><p>AI 的判断链条暴露给用户，用户开始能够在推理的中间节点介入并修改前提。</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2028</div>
+        <div class="tl-content"><h4>认知漂移追踪成为标配</h4><p>系统定期向用户展示其思想的演化轨迹，"对话遗址"成为主流产品形态。</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2030</div>
+        <div class="tl-content"><h4>平行现实界面标准化</h4><p>多条决策路径并行存在，用户在不同时间线之间切换和比较。</p></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑩ COMPARISON TABLE -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 10</div>
+    <h2>Table · 对比表格</h2>
+    <p class="desc">无圆角，无背景色块，标题行用粗线，数据行用细线。简单、直接、有结构感。</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>设计维度</th>
+          <th>传统效率界面</th>
+          <th>Editorial Ink 风格</th>
+          <th>适用场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>摩擦感</td>
+          <td>最小化</td>
+          <td>保留必要摩擦</td>
+          <td>深度内容消费</td>
+        </tr>
+        <tr>
+          <td>动效</td>
+          <td>全程微动效</td>
+          <td>仅入场，其余静止</td>
+          <td>阅读类产品</td>
+        </tr>
+        <tr>
+          <td>色彩数量</td>
+          <td>多色系</td>
+          <td>2色（墨+强调）</td>
+          <td>报告、文档</td>
+        </tr>
+        <tr>
+          <td>字体数量</td>
+          <td>1–2 种</td>
+          <td>恰好 2 种，对比强烈</td>
+          <td>有立场的内容</td>
+        </tr>
+        <tr>
+          <td>圆角</td>
+          <td>普遍存在</td>
+          <td><span class="check-n">✕ 不使用</span></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ⑪ ASYMMETRIC LAYOUT -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 11</div>
+    <h2>Asymmetric Layout · 不对称双栏</h2>
+    <p class="desc">主内容 2fr，边注 1fr。边注用轻背景和细左边框区分，适合需要补充说明的长文。</p>
+
+    <div class="asym-grid">
+      <div>
+        <p>交互本体并不是一次性设计完成的结构。它像是一条不断被踩踏的小路，最初可能只是草地上的痕迹，随着使用者的增加逐渐变得清晰。每一次版本更新、每一次策略调整，都会在这条路上留下新的分叉。</p>
+        <p>用户的行为反过来影响设计决策，而设计决策又重新塑造用户的行为习惯。这种演化并不像数据模型的迭代那样可以被完整记录。</p>
+      </div>
+      <div class="asym-aside">
+        <div class="asym-aside-title">边注 · Margin Note</div>
+        <p>这种不对称布局来自学术论文和法律文件的排版传统——主张放在左侧宽栏，注释放在右侧窄栏。</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑫ META / BYLINE -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 12</div>
+    <h2>Meta Row & Byline · 元信息行与作者卡</h2>
+    <p class="desc">文章元信息和作者署名的标准化呈现方式。所有数字、标签均使用 Space Mono。</p>
+
+    <div class="ex-label">元信息行</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-key">发布时间</span><span class="meta-val">2025.03.14</span></div>
+      <div class="meta-item"><span class="meta-key">阅读时长</span><span class="meta-val">12 MIN</span></div>
+      <div class="meta-item"><span class="meta-key">字数</span><span class="meta-val">6,240</span></div>
+      <div class="meta-item"><span class="meta-key">版本</span><span class="meta-val">V2.0</span></div>
+    </div>
+
+    <div class="ex-label">作者卡</div>
+    <div class="byline-card">
+      <div class="byline-avatar">李</div>
+      <div class="byline-info">
+        <div class="byline-name">李明远</div>
+        <div class="byline-role">交互哲学研究者 · 独立设计师</div>
+        <p class="byline-bio">专注于人机关系的哲学基础研究，探索AI时代交互设计的伦理边界。曾就职于多家科技公司，现为独立研究者。</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑬ TOC -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 13</div>
+    <h2>Table of Contents · 目录</h2>
+    <p class="desc">印刷书籍式目录。条目之间用点线填充，章节编号用砖红色 Space Mono。</p>
+
+    <div class="toc">
+      <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">精神气质</span><span class="toc-dots"></span><span class="toc-page">04</span></div>
+      <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">色彩系统</span><span class="toc-dots"></span><span class="toc-page">08</span></div>
+      <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">字体系统</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+      <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">结构与版式</span><span class="toc-dots"></span><span class="toc-page">22</span></div>
+      <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">核心组件词汇</span><span class="toc-dots"></span><span class="toc-page">30</span></div>
+      <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">动效原则</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+      <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">Do / Don't</span><span class="toc-dots"></span><span class="toc-page">48</span></div>
+      <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">组件展示库</span><span class="toc-dots"></span><span class="toc-page">52</span></div>
+    </div>
+  </div>
+
+
+  <!-- ⑭ RULES & DIVIDERS -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 14</div>
+    <h2>Rule · 分割线变体</h2>
+    <p class="desc">分割线是这套风格建立层次结构的核心工具。五种变体，各有语义。</p>
+
+    <div class="ex-label">粗线 — 页面级硬边界（header/footer）</div>
+    <hr class="rule-thick">
+    <div class="ex-label" style="margin-top:24px;">细线 — 章节内容分割（最常用）</div>
+    <hr class="rule-thin">
+    <div class="ex-label" style="margin-top:24px;">砖红短线 — 装饰性分割（结语处）</div>
+    <hr class="rule-accent">
+    <div class="ex-label" style="margin-top:24px;">虚线 — 附属内容分割（注脚区域）</div>
+    <hr class="rule-dashed">
+    <div class="ex-label" style="margin-top:24px;">带标签的分割线 — 跨章节过渡</div>
+    <div class="rule-with-label">续 · Continued</div>
+  </div>
+
+
+  <!-- ⑮ FIGURE & CAPTION -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 15</div>
+    <h2>Figure · 图片与说明</h2>
+    <p class="desc">图片本身保持素色边框，无阴影。图注紧跟其后，用 Space Mono 粗体标注图号。</p>
+
+    <div class="figure-block">
+      <div class="figure-placeholder">图片占位 · Image Placeholder</div>
+      <p class="figure-caption"><strong>图 1.1</strong>交互哲学框架下，用户与AI系统的存在性关系示意图。横轴为时间积分，纵轴为交互自由度指数。</p>
+    </div>
+  </div>
+
+
+  <!-- ⑯ CHAPTER OPENER -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 16</div>
+    <h2>Chapter Opener · 章节开篇</h2>
+    <p class="desc">长文档中每个主要章节的开篇样式。大数字作为装饰背景，用描边而非填充，避免喧宾夺主。</p>
+
+    <div class="chapter-opener">
+      <div class="ch-opener-num">03</div>
+      <div class="ch-opener-content">
+        <div class="ch-opener-label">Chapter Three · 价值论基础</div>
+        <div class="ch-opener-title">从描述到规范</div>
+        <p class="ch-opener-desc">宇宙本体论是描述性的，但应用本体论是规范性的。这个张力需要被明确处理——在承认"存在即交互"的同时，我们还需要回答：哪些交互是好的？</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑰ FOOTNOTE -->
+  <div class="showcase-section">
+    <div class="showcase-label">Component 17</div>
+    <h2>Footnote · 脚注</h2>
+    <p class="desc">学术风格脚注。细分割线在上，编号用砖红色，注文用小字灰色。</p>
+
+    <div class="footnote-block">
+      <div class="footnote-item">
+        <span class="fn-num">1</span>
+        <span class="fn-text">普利高津的耗散结构理论（Ilya Prigogine, 1977）指出，开放系统通过与外界的物质和能量交换来维持低熵状态，这与本文"存在即动态维持"的论点高度契合。</span>
+      </div>
+      <div class="footnote-item">
+        <span class="fn-num">2</span>
+        <span class="fn-text">感觉剥夺实验（Sensory Deprivation Experiments）最早由 John Lilly 在 1954 年系统展开，后续研究证实，切断外界交互在 24–72 小时内会导致明显的认知和知觉扭曲。</span>
+      </div>
+      <div class="footnote-item">
+        <span class="fn-num">3</span>
+        <span class="fn-text">本文的"交互自由度"（F）概念借鉴了控制论中"行为空间"（behavioral space）的形式化框架，但将其扩展到本体论而非单纯的功能性描述。</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ⑱ BREADCRUMB -->
+  <div class="showcase-section" style="border-bottom:none;">
+    <div class="showcase-label">Component 18</div>
+    <h2>Breadcrumb · 路径导航</h2>
+    <p class="desc">极小字，全大写，用 Space Mono，分隔符用极淡的斜线。只出现在需要定位层级的场景。</p>
+
+    <div class="breadcrumb">
+      <span>规范文档</span>
+      <span class="breadcrumb-sep">/</span>
+      <span>组件展示库</span>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">路径导航</span>
+    </div>
+
+    <div class="breadcrumb" style="margin-top:16px;">
+      <span>首页</span>
+      <span class="breadcrumb-sep">/</span>
+      <span>交互哲学</span>
+      <span class="breadcrumb-sep">/</span>
+      <span>AI时代的交互结构</span>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">依赖透明度界面</span>
+    </div>
+
+    <!-- Final coda -->
+    <div style="padding:72px 0 40px; text-align:center;">
+      <hr class="rule-accent" style="margin:0 auto 40px;">
+      <p style="font-size:20px;font-weight:600;line-height:1.6;max-width:520px;margin:0 auto 12px;">每个设计决定都应该能回答：<br>这让内容的分量更可见了，还是更稀薄了？</p>
+      <p style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--dim);margin-top:24px;">Editorial Ink · 18 Components · v2.0</p>
+    </div>
+  </div>
+
+</div><!-- end wrap -->
+
+<footer>
+  <span>Editorial Ink · Design Style Specification</span>
+  <span>v2.0 · 18 Components</span>
+</footer>
+
+</body>
+</html>

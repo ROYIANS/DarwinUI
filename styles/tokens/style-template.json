@@ -1,0 +1,16 @@
+{
+  "id": "<new-style-id>",
+  "displayName": "<New Style Name>",
+  "tone": "<One-line tone summary>",
+  "source": {
+    "html": "styles/<new-style-id>/index.html",
+    "guideline": "styles/<new-style-id>/guideline-readme.md",
+    "skill": "skills/darwinui-style-<new-style-id>/SKILL.md"
+  },
+  "tokens": {
+    "colors": {},
+    "typography": {},
+    "layout": {}
+  },
+  "componentVocabulary": []
+}

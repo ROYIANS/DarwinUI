@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRUTALIST EDITORIAL — Design System III</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,700;1,300&family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --white: #f2f0eb;
+  --off:   #e8e5de;
+  --ink:   #0d0d0b;
+  --red:   #e3210a;
+  --rule:  rgba(13,13,11,0.12);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 300;
+  line-height: 1.6;
+  font-size: 13px;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── UTILITY ── */
+.mono  { font-family: 'IBM Plex Mono', monospace; }
+.sans  { font-family: 'IBM Plex Sans', sans-serif; }
+.zh    { font-family: 'Noto Sans SC', sans-serif; }
+.bebas { font-family: 'Bebas Neue', sans-serif; }
+
+/* ──────────────────────────────────────
+   HERO — THE FULL COLLISION
+────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border-bottom: 3px solid var(--ink);
+  overflow: hidden;
+  position: relative;
+}
+
+/* top bar */
+.hero-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border-bottom: 1px solid var(--ink);
+  height: 44px;
+}
+.hero-bar-item {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 20px;
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  border-right: 1px solid var(--ink);
+  white-space: nowrap;
+}
+.hero-bar-item:last-child { border-right: none; flex: 1; justify-content: flex-end; }
+.hero-bar-item.hi { background: var(--ink); color: var(--white); }
+.hero-bar-item.red { background: var(--red); color: var(--white); }
+
+/* main hero body */
+.hero-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--ink);
+}
+
+.hero-left {
+  border-right: 1px solid var(--ink);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+}
+
+/* giant word */
+.hero-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(100px, 18vw, 240px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  padding: 40px 40px 0;
+  position: relative;
+  z-index: 2;
+}
+.hero-word span {
+  display: block;
+}
+.hero-word .stroke {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ink);
+}
+.hero-word .red-fill {
+  color: var(--red);
+}
+
+/* hero left bottom strip */
+.hero-left-bottom {
+  border-top: 1px solid var(--ink);
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(13,13,11,0.4);
+}
+
+/* hero right */
+.hero-right {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.hero-right-top {
+  padding: 40px 44px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--ink);
+}
+
+.hero-issue {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(13,13,11,0.4);
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.hero-desc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(13,13,11,0.6);
+  max-width: 400px;
+  border-left: 2px solid var(--red);
+  padding-left: 16px;
+}
+
+.hero-right-bottom {
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero-stat {
+  padding: 20px 24px;
+  border-right: 1px solid var(--ink);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.hero-stat-l {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(13,13,11,0.4);
+}
+
+/* hero bottom strip */
+.hero-bottom {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+.hero-ticker {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 40px;
+  border-right: 1px solid var(--ink);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(13,13,11,0.4);
+  white-space: nowrap;
+}
+.hero-ticker-content {
+  display: inline-block;
+  animation: ticker 22s linear infinite;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.hero-sys {
+  display: flex; align-items: center; padding: 0 24px;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(13,13,11,0.4);
+}
+
+/* ──────────────────────────────────────
+   NAVIGATION BAR
+────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  display: flex;
+  align-items: stretch;
+  height: 44px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--white);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+  display: flex; align-items: center;
+  padding: 0 24px;
+  border-right: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.nav-logo span { color: var(--red); }
+.nav-links {
+  display: flex; list-style: none; flex: 1;
+}
+.nav-links li {
+  display: flex; align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid var(--ink);
+  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(13,13,11,0.5);
+  white-space: nowrap;
+}
+.nav-links li:hover { background: var(--ink); color: var(--white); cursor: crosshair; }
+.nav-end {
+  display: flex; align-items: center; padding: 0 20px;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red); margin-left: auto;
+}
+
+/* ──────────────────────────────────────
+   LAYOUT
+────────────────────────────────────── */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+/* ──────────────────────────────────────
+   CHAPTER HEADER
+────────────────────────────────────── */
+.ch {
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+
+/* giant chapter number behind heading */
+.ch-bg {
+  position: absolute;
+  right: -20px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(160px, 22vw, 300px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(13,13,11,0.05);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.02em;
+}
+
+.ch-label {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(13,13,11,0.35);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ch-label::before {
+  content: '';
+  display: block; width: 20px; height: 1px;
+  background: var(--red);
+}
+
+.ch h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  margin-bottom: 24px;
+  position: relative; z-index: 1;
+}
+.ch h2 .red { color: var(--red); }
+
+.ch-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  position: relative; z-index: 1;
+}
+.ch-body p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(13,13,11,0.65);
+}
+.ch-body strong { color: var(--ink); font-weight: 700; }
+
+/* ──────────────────────────────────────
+   EX LABEL
+────────────────────────────────────── */
+.ex {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(13,13,11,0.35);
+  margin: 36px 0 14px;
+}
+.ex::after { content:''; flex:1; height:1px; background:var(--rule); }
+.ex .n { color: var(--red); }
+
+/* ──────────────────────────────────────
+   COMP SECTION
+────────────────────────────────────── */
+.comp {
+  padding: 60px 0 48px;
+  border-bottom: 1px solid var(--ink);
+}
+.comp-label {
+  font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase;
+  color: rgba(13,13,11,0.3); margin-bottom: 6px;
+}
+.comp h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.comp h3 .r { color: var(--red); }
+.comp > .note {
+  font-size: 12px;
+  color: rgba(13,13,11,0.45);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ──────────────────────────────────────
+   SPEC BLOCK
+────────────────────────────────────── */
+.spec {
+  background: var(--ink);
+  color: var(--white);
+  padding: 28px 32px;
+  margin: 24px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 2;
+  border-left: 4px solid var(--red);
+}
+.spec-h { font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.spec-dim { color: rgba(242,240,235,0.3); }
+.spec-v { color: var(--white); }
+
+/* ──────────────────────────────────────
+   SCALE DEMO — the core brutalist move
+────────────────────────────────────── */
+.scale-demo {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.scale-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+}
+.scale-size {
+  font-size: 9px; letter-spacing: 0.2em;
+  color: rgba(13,13,11,0.3); min-width: 48px;
+}
+
+/* ──────────────────────────────────────
+   COLOR SYSTEM
+────────────────────────────────────── */
+.palette-strip {
+  height: 88px;
+  display: flex;
+  border: 1px solid var(--ink);
+  border-bottom: none;
+  overflow: hidden;
+  margin: 20px 0 0;
+}
+.ps { flex: 1; transition: flex 0.25s ease; }
+.ps:hover { flex: 3; }
+.ps + .ps { border-left: 1px solid var(--ink); }
+
+.palette-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--ink);
+  border-top: none;
+  margin-bottom: 8px;
+}
+.palette-table td {
+  padding: 10px 16px;
+  font-size: 11px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+.palette-table td:last-child { border-right: none; }
+.palette-table tr:last-child td { border-bottom: none; }
+.pt-dot { width: 16px; height: 16px; border: 1px solid var(--rule); display: inline-block; vertical-align: middle; margin-right: 8px; }
+.pt-name { font-weight: 700; }
+.pt-hex  { color: rgba(13,13,11,0.4); font-size: 10px; letter-spacing: 0.05em; }
+.pt-use  { color: rgba(13,13,11,0.5); font-size: 11px; }
+
+/* ──────────────────────────────────────
+   KICKER VARIANTS
+────────────────────────────────────── */
+.kicker {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.kicker::before { content:''; width:16px; height:1px; background:var(--red); }
+.kicker.k-red { color: var(--red); }
+.kicker.k-dim { color: rgba(13,13,11,0.4); }
+.kicker.k-dim::before { background: rgba(13,13,11,0.3); }
+.kicker.k-box { border: 1px solid var(--ink); padding: 5px 12px; }
+.kicker.k-box::before { display:none; }
+.kicker.k-fill { background: var(--ink); color: var(--white); padding: 5px 12px; }
+.kicker.k-fill::before { background: var(--white); }
+.kicker.k-red-fill { background: var(--red); color: var(--white); padding: 5px 12px; }
+.kicker.k-red-fill::before { display:none; }
+
+/* ──────────────────────────────────────
+   PULL QUOTE
+────────────────────────────────────── */
+.pq {
+  padding: 48px 0;
+  margin: 24px 0;
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 32px;
+  align-items: center;
+}
+.pq-mark {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 200px;
+  line-height: 0.7;
+  color: var(--red);
+  padding-right: 8px;
+}
+.pq-body blockquote {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 2.8vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.pq-source {
+  margin-top: 16px;
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(13,13,11,0.35);
+  display: flex; align-items: center; gap: 10px;
+}
+.pq-source::before { content:''; width: 20px; height: 1px; background: var(--red); }
+
+/* small quote variant */
+.pq-sm {
+  padding: 24px 0 24px 24px;
+  border-left: 4px solid var(--red);
+  margin: 20px 0 8px;
+}
+.pq-sm blockquote {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.pq-sm .src { margin-top: 10px; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(13,13,11,0.35); }
+
+/* ──────────────────────────────────────
+   BADGES / TAGS
+────────────────────────────────────── */
+.tag-row { display: flex; flex-wrap: wrap; gap: 0; margin: 8px 0; }
+.tag {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 7px 16px;
+  border: 1px solid var(--ink);
+  margin-right: -1px; margin-bottom: -1px;
+  white-space: nowrap;
+}
+.tag:hover { background: var(--ink); color: var(--white); z-index: 1; position: relative; }
+.tag.t-f { background: var(--ink); color: var(--white); }
+.tag.t-r { background: var(--red); color: var(--white); border-color: var(--red); }
+.tag.t-o { background: transparent; }
+.tag.t-dim { border-color: var(--rule); color: rgba(13,13,11,0.35); }
+
+/* ──────────────────────────────────────
+   CALLOUT
+────────────────────────────────────── */
+.callout {
+  border: 1px solid var(--ink);
+  padding: 0;
+  margin: 8px 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 4px 1fr;
+}
+.callout-stripe { background: var(--red); }
+.callout-stripe.s-ink { background: var(--ink); }
+.callout-body { padding: 20px 24px; }
+.callout-t {
+  font-size: 8px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.callout-t.dim { color: rgba(13,13,11,0.4); }
+.callout p { font-size: 13px; line-height: 1.8; color: rgba(13,13,11,0.65); }
+
+/* inverted callout */
+.callout-inv {
+  background: var(--ink); color: var(--white);
+  border-color: var(--ink);
+  padding: 24px 28px;
+  margin: 8px 0;
+}
+.callout-inv .callout-t { color: var(--red); }
+.callout-inv p { color: rgba(242,240,235,0.65); }
+
+/* ──────────────────────────────────────
+   STAT CARDS
+────────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--ink);
+  margin: 8px 0;
+}
+.sc {
+  padding: 28px 24px;
+  border-right: 1px solid var(--ink);
+  position: relative;
+}
+.sc:last-child { border-right: none; }
+.sc-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; line-height: 1;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+.sc-n .sup { font-size: 24px; color: var(--red); vertical-align: super; }
+.sc-l { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(13,13,11,0.4); line-height: 1.6; }
+.sc-d { font-size: 9px; letter-spacing: 0.1em; color: var(--red); margin-top: 10px; }
+
+/* ──────────────────────────────────────
+   DATA BARS
+────────────────────────────────────── */
+.dbars { margin: 8px 0; }
+.dbar {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.dbar:first-child { border-top: 1px solid var(--rule); }
+.dbar-n { font-size: 11px; color: rgba(13,13,11,0.6); }
+.dbar-track { height: 2px; background: var(--rule); position: relative; }
+.dbar-fill { height: 2px; background: var(--ink); position: absolute; left: 0; top: 0; }
+.dbar-fill.r { background: var(--red); }
+.dbar-v { font-size: 11px; letter-spacing: 0.1em; color: var(--ink); min-width: 36px; text-align: right; font-weight: 700; }
+
+/* ──────────────────────────────────────
+   FEATURE CARDS — brutalist style
+────────────────────────────────────── */
+.fc-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink); margin: 8px 0; }
+.fc {
+  padding: 32px 28px 28px;
+  border-right: 1px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.fc:last-child { border-right: none; }
+.fc-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px; line-height: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(13,13,11,0.08);
+  letter-spacing: -0.02em;
+  margin-bottom: -16px;
+}
+.fc-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700; font-size: 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.2; margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+.fc-body { font-size: 12px; line-height: 1.8; color: rgba(13,13,11,0.5); }
+
+/* fc inverted */
+.fc.inv { background: var(--ink); }
+.fc.inv .fc-num { -webkit-text-stroke: 1px rgba(242,240,235,0.08); }
+.fc.inv .fc-title { color: var(--white); }
+.fc.inv .fc-body { color: rgba(242,240,235,0.4); }
+
+/* ──────────────────────────────────────
+   LIST
+────────────────────────────────────── */
+.blist { list-style: none; padding: 0; margin: 8px 0; }
+.blist li {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(13,13,11,0.7);
+}
+.blist li:first-child { border-top: 1px solid var(--rule); }
+.blist .ln {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; line-height: 1;
+  color: rgba(13,13,11,0.1);
+  min-width: 28px;
+}
+.blist .ln.r { color: var(--red); }
+
+/* dash list */
+.dlist { list-style: none; padding: 0; margin: 8px 0; }
+.dlist li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px; line-height: 1.7;
+  color: rgba(13,13,11,0.65);
+  display: flex; gap: 12px;
+}
+.dlist li:first-child { border-top: 1px solid var(--rule); }
+.dlist li::before { content: '—'; color: var(--red); flex-shrink: 0; }
+
+/* ──────────────────────────────────────
+   TIMELINE
+────────────────────────────────────── */
+.tl { position: relative; margin: 8px 0; }
+.tl::before { content:''; position:absolute; left:64px; top:0; bottom:0; width:1px; background:var(--rule); }
+.tl-item { display:grid; grid-template-columns:64px 1fr; gap:0 28px; padding-bottom:28px; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-yr {
+  font-family:'Bebas Neue',sans-serif; font-size:18px; line-height:1;
+  text-align:right; padding-right:18px; padding-top:2px;
+  position:relative; color: rgba(13,13,11,0.25);
+}
+.tl-yr::after { content:''; position:absolute; right:-5px; top:5px; width:8px; height:8px; background:var(--red); }
+.tl-c h4 { font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:14px; margin-bottom:4px; letter-spacing:-0.01em; }
+.tl-c p  { font-size:12px; color:rgba(13,13,11,0.5); line-height:1.7; margin:0; }
+
+/* ──────────────────────────────────────
+   TABLE
+────────────────────────────────────── */
+.btable { width:100%; border-collapse:collapse; border:1px solid var(--ink); margin:8px 0; }
+.btable th {
+  font-size:8px; letter-spacing:0.3em; text-transform:uppercase;
+  padding:10px 16px; border-bottom:2px solid var(--ink); border-right:1px solid var(--rule);
+  text-align:left; font-weight:400; color:rgba(13,13,11,0.4); background: var(--off);
+}
+.btable th:last-child { border-right:none; }
+.btable td { font-size:12px; padding:11px 16px; border-bottom:1px solid var(--rule); border-right:1px solid var(--rule); color:rgba(13,13,11,0.65); vertical-align:top; line-height:1.6; }
+.btable td:last-child { border-right:none; }
+.btable tr:last-child td { border-bottom:none; }
+.btable td:first-child { color:var(--ink); font-weight:700; }
+.btable .hi { color:var(--red); font-weight:700; font-size:11px; }
+.btable .lo { color:rgba(13,13,11,0.3); font-size:11px; }
+
+/* ──────────────────────────────────────
+   META ROW
+────────────────────────────────────── */
+.meta {
+  display:flex; flex-wrap:wrap; gap:0;
+  border:1px solid var(--ink); margin:8px 0;
+}
+.meta-item {
+  padding:14px 24px; border-right:1px solid var(--ink); flex:1;
+}
+.meta-item:last-child { border-right:none; }
+.meta-k { font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(13,13,11,0.3); margin-bottom:4px; }
+.meta-v { font-family:'Bebas Neue',sans-serif; font-size:22px; line-height:1; }
+.meta-v.red { color:var(--red); }
+
+/* ──────────────────────────────────────
+   BYLINE CARD
+────────────────────────────────────── */
+.byline {
+  border:1px solid var(--ink);
+  display:grid; grid-template-columns:auto 1fr;
+  margin:8px 0; overflow:hidden;
+}
+.byline-av {
+  width:80px; background:var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:40px; color:var(--white);
+  border-right:1px solid var(--ink);
+}
+.byline-body { padding:20px 24px; }
+.byline-name { font-family:'IBM Plex Sans',sans-serif; font-weight:700; font-size:16px; letter-spacing:-0.01em; margin-bottom:2px; }
+.byline-role { font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:10px; }
+.byline-bio { font-size:12px; color:rgba(13,13,11,0.5); line-height:1.7; }
+
+/* ──────────────────────────────────────
+   TOC
+────────────────────────────────────── */
+.toc { border:1px solid var(--ink); margin:8px 0; }
+.toc-item {
+  display:flex; align-items:baseline;
+  padding:12px 20px; border-bottom:1px solid var(--rule);
+  font-size:13px;
+}
+.toc-item:last-child { border-bottom:none; }
+.toc-item:hover { background:var(--off); }
+.toc-n {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; line-height:1;
+  color:rgba(13,13,11,0.12); min-width:40px; margin-right:4px;
+}
+.toc-title { flex:1; color:rgba(13,13,11,0.75); }
+.toc-dots { flex:1; border-bottom:1px dotted var(--rule); margin:0 12px; position:relative; top:-4px; }
+.toc-pg { font-family:'Bebas Neue',sans-serif; font-size:20px; color:rgba(13,13,11,0.2); }
+
+/* ──────────────────────────────────────
+   FIGURE
+────────────────────────────────────── */
+.fig-ph {
+  background:var(--off); border:1px solid var(--ink);
+  height:180px; display:flex; align-items:center; justify-content:center;
+  font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(13,13,11,0.3);
+}
+.fig-cap { font-size:11px; color:rgba(13,13,11,0.45); line-height:1.7; margin-top:8px; border-top:1px solid var(--rule); padding-top:8px; }
+.fig-cap strong { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink); margin-right:8px; }
+
+/* ──────────────────────────────────────
+   RULES
+────────────────────────────────────── */
+.r3 { border:none; border-top:3px solid var(--ink); margin:20px 0; }
+.r1 { border:none; border-top:1px solid var(--rule); margin:20px 0; }
+.r-red { border:none; border-top:2px solid var(--red); width:40px; margin:20px 0; }
+.r-label {
+  display:flex; align-items:center; gap:14px; margin:20px 0;
+  font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(13,13,11,0.3);
+}
+.r-label::before, .r-label::after { content:''; flex:1; height:1px; background:var(--rule); }
+
+/* ──────────────────────────────────────
+   CHAPTER OPENER COMPONENT
+────────────────────────────────────── */
+.ch-opener {
+  border:1px solid var(--ink); overflow:hidden; margin:8px 0;
+  display:grid; grid-template-columns:1fr;
+}
+.cho-top {
+  border-bottom:1px solid var(--ink);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 28px; height:40px;
+  background:var(--off);
+}
+.cho-label { font-size:8px; letter-spacing:0.35em; text-transform:uppercase; color:rgba(13,13,11,0.35); }
+.cho-tag { font-size:8px; letter-spacing:0.25em; text-transform:uppercase; color:var(--red); }
+.cho-body { padding:28px 28px 0; }
+.cho-num {
+  font-family:'Bebas Neue',sans-serif; font-size:100px; line-height:0.85;
+  color:transparent; -webkit-text-stroke:1px rgba(13,13,11,0.1);
+  margin-bottom:-8px;
+}
+.cho-title {
+  font-family:'IBM Plex Sans',sans-serif; font-weight:700;
+  font-size:28px; line-height:1.1; letter-spacing:-0.02em; margin-bottom:12px;
+}
+.cho-desc { font-size:13px; line-height:1.8; color:rgba(13,13,11,0.55); padding-bottom:28px; }
+
+/* ──────────────────────────────────────
+   FOOTNOTE
+────────────────────────────────────── */
+.fn { padding-top:16px; border-top:1px solid var(--rule); margin:8px 0; }
+.fn-item { display:flex; gap:12px; margin-bottom:10px; align-items:baseline; }
+.fn-n { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--red); min-width:18px; line-height:1; }
+.fn-t { font-size:11px; color:rgba(13,13,11,0.45); line-height:1.7; }
+
+/* ──────────────────────────────────────
+   BREADCRUMB
+────────────────────────────────────── */
+.bc {
+  display:flex; align-items:center; gap:10px; margin:8px 0;
+  font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(13,13,11,0.35);
+}
+.bc-sep { color:var(--rule); }
+.bc-cur { color:var(--red); }
+
+/* ──────────────────────────────────────
+   ANNOTATION
+────────────────────────────────────── */
+.ann { display:grid; grid-template-columns:1fr 180px; gap:40px; margin:8px 0; }
+.ann-body p { font-size:13px; line-height:1.9; color:rgba(13,13,11,0.65); margin-bottom:14px; }
+.ann-note { font-size:11px; line-height:1.7; color:rgba(13,13,11,0.4); border-left:2px solid var(--red); padding-left:14px; }
+.ann-note strong { display:block; font-size:8px; letter-spacing:0.25em; text-transform:uppercase; color:var(--red); margin-bottom:6px; }
+
+/* ──────────────────────────────────────
+   DO / DON'T
+────────────────────────────────────── */
+.dodont {
+  display:grid; grid-template-columns:1fr 1fr;
+  border:1px solid var(--ink); margin:8px 0;
+}
+.do, .dont { padding:28px; }
+.do { border-right:1px solid var(--ink); }
+.do-l, .dont-l { font-size:8px; letter-spacing:0.35em; text-transform:uppercase; margin-bottom:14px; }
+.do-l { color:var(--ink); }
+.dont-l { color:var(--red); }
+.do li, .dont li { font-size:12px; line-height:1.8; color:rgba(13,13,11,0.55); margin-left:14px; margin-bottom:5px; }
+
+/* ──────────────────────────────────────
+   GRID SHOWCASE — numbers as graphics
+────────────────────────────────────── */
+.num-grid {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border:1px solid var(--ink); border-bottom:none; margin:8px 0;
+}
+.ng-item {
+  border-right:1px solid var(--rule); border-bottom:1px solid var(--ink);
+  padding:20px 16px; text-align:center;
+}
+.ng-item:last-child { border-right:none; }
+.ng-n {
+  font-family:'Bebas Neue',sans-serif; font-size:64px; line-height:1;
+  color:transparent; -webkit-text-stroke:1px var(--ink); letter-spacing:-0.02em;
+}
+.ng-n.fill { color:var(--ink); -webkit-text-stroke:none; }
+.ng-n.red  { color:var(--red); -webkit-text-stroke:none; }
+.ng-n.red-stroke { -webkit-text-stroke:1px var(--red); }
+.ng-label { font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(13,13,11,0.3); margin-top:4px; }
+
+/* ──────────────────────────────────────
+   MANIFESTO / CODA
+────────────────────────────────────── */
+.manifesto {
+  padding: 100px 48px;
+  border-top: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.manifesto-left {}
+.manifesto-num {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(140px,20vw,260px);
+  line-height:0.85; letter-spacing:-0.02em;
+  color:transparent; -webkit-text-stroke:2px var(--ink);
+  margin-bottom:0;
+}
+.manifesto-right {}
+.manifesto-text {
+  font-family:'IBM Plex Sans',sans-serif;
+  font-weight:700;
+  font-size:clamp(22px,2.5vw,32px);
+  line-height:1.2;
+  letter-spacing:-0.02em;
+  margin-bottom:24px;
+}
+.manifesto-text .r { color:var(--red); }
+.manifesto-sub {
+  font-size:9px; letter-spacing:0.3em; text-transform:uppercase;
+  color:rgba(13,13,11,0.35); margin-top:32px; display:block;
+}
+
+/* ──────────────────────────────────────
+   FOOTER
+────────────────────────────────────── */
+footer {
+  border-top:3px solid var(--ink);
+  display:grid; grid-template-columns:auto 1fr auto auto;
+  align-items:stretch; min-height:52px;
+}
+.f-brand {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.05em;
+  display:flex; align-items:center; padding:0 28px;
+  border-right:1px solid var(--ink);
+}
+.f-brand span { color:var(--red); }
+.f-center {
+  display:flex; align-items:center; padding:0 24px;
+  font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(13,13,11,0.35);
+}
+.f-tag {
+  display:flex; align-items:center; padding:0 24px;
+  font-size:9px; letter-spacing:0.2em; text-transform:uppercase;
+  border-left:1px solid var(--ink); color:rgba(13,13,11,0.35);
+}
+.f-num {
+  font-family:'Bebas Neue',sans-serif; font-size:22px;
+  display:flex; align-items:center; padding:0 24px;
+  border-left:1px solid var(--ink);
+  color:rgba(13,13,11,0.2);
+}
+
+/* ──────────────────────────────────────
+   ANIMATIONS
+────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hero-word  { animation: fadeUp 0.6s ease forwards; }
+.hero-title { animation: fadeUp 0.6s ease 0.15s forwards; opacity:0; }
+.hero-desc  { animation: fadeUp 0.6s ease 0.3s forwards; opacity:0; }
+.hero-bottom{ animation: fadeUp 0.6s ease 0.45s forwards; opacity:0; }
+
+/* ──────────────────────────────────────
+   RESPONSIVE
+────────────────────────────────────── */
+@media(max-width:900px){
+  .hero-body { grid-template-columns:1fr; }
+  .hero-left { border-right:none; border-bottom:1px solid var(--ink); }
+  .wrap { padding:0 24px; }
+  .ch-body, .stat-grid, .fc-grid, .dodont, .ann, .manifesto { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:1fr 1fr; }
+  .num-grid  { grid-template-columns:repeat(3,1fr); }
+  footer { grid-template-columns:auto 1fr; }
+  .f-tag, .f-num { display:none; }
+  .manifesto { padding:60px 24px; }
+  .nav-links li:not(:first-child):not(:nth-child(2)) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<header>
+  <div class="hero-bar">
+    <div class="hero-bar-item hi">BRUTALIST</div>
+    <div class="hero-bar-item red">EDITORIAL</div>
+    <div class="hero-bar-item">Design System No.3</div>
+    <div class="hero-bar-item">文字即图形</div>
+    <div class="hero-bar-item">2025.03</div>
+  </div>
+
+  <div class="hero-body">
+    <div class="hero-left">
+      <div class="hero-word">
+        <span>TYPE</span>
+        <span class="stroke">IS</span>
+        <span class="red-fill">FORM</span>
+      </div>
+      <div class="hero-left-bottom">
+        <span>vol. III</span>
+        <span>荷兰实验排版</span>
+        <span>→ 正在阅读</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-right-top">
+        <div class="hero-issue">Design System · Issue 03 · Brutalist Editorial</div>
+        <h1 class="hero-title">当文字<br>成为图形</h1>
+        <p class="hero-desc">
+          字号从8px到300px可以同时出现在一个页面上。留白不是"呼吸"，而是"空洞"。这套风格不解释自己，它只是站在那里，等你理解。
+        </p>
+      </div>
+      <div class="hero-right-bottom">
+        <div class="hero-stat">
+          <div class="hero-stat-n">19</div>
+          <div class="hero-stat-l">Components</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">03</div>
+          <div class="hero-stat-l">字体</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n" style="color:var(--red);">4</div>
+          <div class="hero-stat-l">色彩</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-ticker">
+      <div class="hero-ticker-content">
+        TYPE IS FORM &nbsp;&nbsp;·&nbsp;&nbsp; TYPOGRAPHY AS GRAPHIC &nbsp;&nbsp;·&nbsp;&nbsp; BRUTALIST EDITORIAL &nbsp;&nbsp;·&nbsp;&nbsp; DESIGN SYSTEM III &nbsp;&nbsp;·&nbsp;&nbsp; 文字即图形 &nbsp;&nbsp;·&nbsp;&nbsp; 有立场的设计 &nbsp;&nbsp;·&nbsp;&nbsp; TYPE IS FORM &nbsp;&nbsp;·&nbsp;&nbsp; TYPOGRAPHY AS GRAPHIC &nbsp;&nbsp;·&nbsp;&nbsp; BRUTALIST EDITORIAL &nbsp;&nbsp;·&nbsp;&nbsp; DESIGN SYSTEM III &nbsp;&nbsp;·&nbsp;&nbsp; 文字即图形 &nbsp;&nbsp;·&nbsp;&nbsp; 有立场的设计 &nbsp;&nbsp;·&nbsp;&nbsp;
+      </div>
+    </div>
+    <div class="hero-sys">v1.0 — 2025</div>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+<nav class="nav">
+  <div class="nav-logo">B<span>·</span>E</div>
+  <ul class="nav-links">
+    <li>Spirit</li>
+    <li>Color</li>
+    <li>Type</li>
+    <li>Scale</li>
+    <li>Components</li>
+    <li>Do / Don't</li>
+  </ul>
+  <div class="nav-end">System III</div>
+</nav>
+
+<div class="wrap">
+
+<!-- ══ CH01: SPIRIT ══ -->
+<div class="ch">
+  <div class="ch-bg">01</div>
+  <div class="ch-label">Chapter 01</div>
+  <h2>精神<br>气质<br><span class="red">SPIRIT</span></h2>
+  <div class="ch-body">
+    <p>这套风格的精神来自一个信念：<strong>版面不是内容的容器，版面本身就是内容。</strong>当一个字的字号是另一个字的三十倍，当一行文字横跨整个页面宽度，当"空白"被设计得像一道伤疤——这些排版决策本身在说话，不需要内容来解释。</p>
+    <p>它的原型是70–90年代的荷兰实验设计——Wim Crouwel 的网格系统、Experimental Jetset 的自我指涉、早期 Emigre 杂志的桌面出版粗粝感。这些设计师相信：<strong>美学立场就是政治立场。</strong>怎么排版，就是在宣示你对这个世界持有什么态度。</p>
+  </div>
+</div>
+
+<!-- ══ CH02: COLOR ══ -->
+<div class="ch">
+  <div class="ch-bg">02</div>
+  <div class="ch-label">Chapter 02</div>
+  <h2>四色<br>系统<br><span class="red">COLOR</span></h2>
+
+  <p class="body-p" style="font-size:13px;line-height:1.9;color:rgba(13,13,11,0.65);max-width:640px;margin-bottom:32px;">这套风格只用四种颜色：<strong>暖白、离白、深黑、暴力红。</strong>没有灰阶过渡，没有品牌色系，没有渐变。颜色的存在是为了制造冲击，而不是和谐。红色的出现必须像一个打断——不是装饰，是声明。</p>
+
+  <div class="palette-strip">
+    <div class="ps" style="background:#f2f0eb;" title="white"></div>
+    <div class="ps" style="background:#e8e5de;" title="off"></div>
+    <div class="ps" style="background:#0d0d0b;" title="ink"></div>
+    <div class="ps" style="background:#e3210a;" title="red"></div>
+  </div>
+  <table class="palette-table">
+    <tr>
+      <td><span class="pt-dot" style="background:#f2f0eb;"></span><span class="pt-name">White</span></td>
+      <td class="pt-hex">#f2f0eb</td>
+      <td class="pt-use">主背景。不是纯白，微温，避免屏幕刺目。</td>
+    </tr>
+    <tr>
+      <td><span class="pt-dot" style="background:#e8e5de;border:1px solid rgba(13,13,11,0.1);"></span><span class="pt-name">Off-white</span></td>
+      <td class="pt-hex">#e8e5de</td>
+      <td class="pt-use">次级背景。用于表头、hover 状态等需要区分的区域。</td>
+    </tr>
+    <tr>
+      <td><span class="pt-dot" style="background:#0d0d0b;"></span><span class="pt-name">Ink</span></td>
+      <td class="pt-hex">#0d0d0b</td>
+      <td class="pt-use">主文字与边框。带极微暖调，比纯黑更有温度。</td>
+    </tr>
+    <tr>
+      <td><span class="pt-dot" style="background:#e3210a;"></span><span class="pt-name">Red</span></td>
+      <td class="pt-hex">#e3210a</td>
+      <td class="pt-use">唯一强调色。用于编号、装饰线、关键标签、打断性元素。必须克制。</td>
+    </tr>
+  </table>
+
+  <div class="spec">
+    <div class="spec-h">CSS Variables</div>
+    <div>--white: <span class="spec-v">#f2f0eb</span>  <span class="spec-dim">/* 主背景，微暖白 */</span></div>
+    <div>--off:   <span class="spec-v">#e8e5de</span>  <span class="spec-dim">/* 次级背景，hover 用 */</span></div>
+    <div>--ink:   <span class="spec-v">#0d0d0b</span>  <span class="spec-dim">/* 主文字、边框，暖黑 */</span></div>
+    <div>--red:   <span class="spec-v">#e3210a</span>  <span class="spec-dim">/* 唯一强调色，暴力红 */</span></div>
+    <div>--rule:  <span class="spec-v">rgba(13,13,11,0.12)</span>  <span class="spec-dim">/* 极淡分割线 */</span></div>
+  </div>
+</div>
+
+<!-- ══ CH03: TYPE ══ -->
+<div class="ch">
+  <div class="ch-bg">03</div>
+  <div class="ch-label">Chapter 03</div>
+  <h2>三字<br>体系<br><span class="red">TYPE</span></h2>
+
+  <div class="ch-body" style="margin-bottom:40px;">
+    <p><strong>Bebas Neue</strong>：所有大号展示文字的核心。这是一款无衬线全大写字体，线条均匀，没有粗细变化，看起来像是用直尺画出来的——这种机械感是刻意的。字号越大，它的几何纯粹感越强，大到一定程度会开始产生图形性。</p>
+    <p><strong>IBM Plex Mono</strong>：正文与标签。它的等宽特性让页面有一种打字机的节奏感，每个字符占据相同宽度，制造出一种刻意的非人工感——恰好与 Bebas 的展示感形成张力。<strong>IBM Plex Sans</strong> 作为辅助，用于需要更自然阅读节奏的正文段落。</p>
+  </div>
+
+  <!-- SCALE DEMO -->
+  <div class="scale-demo">
+    <div class="scale-row">
+      <span class="scale-size">300px</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,15vw,200px);line-height:0.9;color:transparent;-webkit-text-stroke:1px var(--ink);">TYPE</span>
+    </div>
+    <div class="scale-row">
+      <span class="scale-size">96px</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,96px);line-height:1;color:var(--red);">FORM</span>
+    </div>
+    <div class="scale-row">
+      <span class="scale-size">48px</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);line-height:1;letter-spacing:0.01em;">DESIGN SYSTEM III</span>
+    </div>
+    <div class="scale-row">
+      <span class="scale-size">24px</span>
+      <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:clamp(16px,2vw,24px);line-height:1.1;letter-spacing:-0.02em;">这套风格不解释自己，它只是站在那里。</span>
+    </div>
+    <div class="scale-row">
+      <span class="scale-size">15px</span>
+      <span style="font-size:15px;line-height:1.8;color:rgba(13,13,11,0.6);">正文使用 IBM Plex Mono 300，行高 1.8，字间距默认。它的等宽特性让阅读产生一种轻微的节奏感。</span>
+    </div>
+    <div class="scale-row">
+      <span class="scale-size">9px</span>
+      <span style="font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(13,13,11,0.35);">LABEL · CAPTION · META INFO · 标签文字</span>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-h">Typography Scale</div>
+    <div>展示大字  : <span class="spec-v">Bebas Neue · clamp(52px,12vw,240px) · lh 0.88–0.95</span></div>
+    <div>章节标题  : <span class="spec-v">Bebas Neue · clamp(52px,7vw,96px) · lh 0.9</span></div>
+    <div>UI 标题   : <span class="spec-v">IBM Plex Sans 700 · 14–28px · ls -0.02em</span></div>
+    <div>正文      : <span class="spec-v">IBM Plex Mono 300 · 13px · lh 1.8–1.9</span></div>
+    <div>标签/标记 : <span class="spec-v">IBM Plex Mono · 8–9px · ls 0.25–0.4em · uppercase</span></div>
+    <div>大数字装饰: <span class="spec-v">Bebas Neue · 任意大字号 · 描边而非填充</span></div>
+  </div>
+</div>
+
+<!-- ══ CH04: COMPONENTS ══ -->
+<div class="ch" style="border-bottom:none;padding-bottom:0;">
+  <div class="ch-bg">04</div>
+  <div class="ch-label">Chapter 04</div>
+  <h2>组件<br>词汇<br><span class="red">SYSTEM</span></h2>
+  <p style="font-size:13px;line-height:1.8;color:rgba(13,13,11,0.55);max-width:560px;">全部 19 个组件实际渲染。每个组件下方附使用说明。</p>
+</div>
+
+
+<!-- C01 KICKER -->
+<div class="comp">
+  <div class="comp-label">Component 01</div>
+  <h3>KICKER<span class="r"> ·</span> 导读标签</h3>
+  <p class="note">标题前的内容类型标记。六种变体。永远小字、全大写、极宽字间距。</p>
+
+  <div class="ex"><span class="n">A</span> 标准红色（默认）</div>
+  <div class="kicker k-red">Feature Report</div>
+
+  <div class="ex"><span class="n">B</span> 暗色文字</div>
+  <div class="kicker k-dim">Analysis</div>
+
+  <div class="ex"><span class="n">C</span> 带边框</div>
+  <div class="kicker k-box">Breaking News</div>
+
+  <div class="ex"><span class="n">D</span> 黑底白字</div>
+  <div class="kicker k-fill">Exclusive</div>
+
+  <div class="ex"><span class="n">E</span> 红底白字（最强调）</div>
+  <div class="kicker k-red-fill">URGENT</div>
+</div>
+
+<!-- C02 BADGE -->
+<div class="comp">
+  <div class="comp-label">Component 02</div>
+  <h3>BADGE<span class="r"> ·</span> 状态徽章</h3>
+  <p class="note">标注分类、状态、版本。无圆角，hover 反色。多个连排时用负边距消除缝隙，形成整体感。</p>
+
+  <div class="ex"><span class="n">A</span> 单独使用</div>
+  <div class="tag-row" style="margin-bottom:16px;">
+    <span class="tag t-o">Draft</span>
+    <span class="tag t-o">Published</span>
+    <span class="tag t-r">Breaking</span>
+    <span class="tag t-f">Featured</span>
+    <span class="tag t-dim">Archived</span>
+  </div>
+
+  <div class="ex"><span class="n">B</span> 连排（共享边框）</div>
+  <div class="tag-row">
+    <span class="tag">Vol. 03</span>
+    <span class="tag">2025.03</span>
+    <span class="tag">Design</span>
+    <span class="tag">Typography</span>
+    <span class="tag t-f">System</span>
+    <span class="tag t-r">New</span>
+  </div>
+</div>
+
+<!-- C03 PULL QUOTE -->
+<div class="comp">
+  <div class="comp-label">Component 03</div>
+  <h3>PULL QUOTE<span class="r"> ·</span> 引言</h3>
+  <p class="note">两种尺寸。大号：引号本身是图形，字号大到占据视觉，粗体无衬线，上下粗线封边。小号：左侧红色边框，无装饰引号。</p>
+
+  <div class="ex"><span class="n">A</span> 大引言（页面级停顿）</div>
+  <div class="pq">
+    <div class="pq-mark">"</div>
+    <div class="pq-body">
+      <blockquote>设计不是装饰，它是一种关于世界应该如何运作的主张。</blockquote>
+      <div class="pq-source">Brutalist Principle No.1</div>
+    </div>
+  </div>
+
+  <div class="ex"><span class="n">B</span> 小引言（正文插入）</div>
+  <div class="pq-sm">
+    <blockquote>当字号大到一定程度，文字会失去语言属性，变成纯粹的视觉形状。</blockquote>
+    <div class="src">Type Theory · 2024</div>
+  </div>
+</div>
+
+<!-- C04 CALLOUT -->
+<div class="comp">
+  <div class="comp-label">Component 04</div>
+  <h3>CALLOUT<span class="r"> ·</span> 行内提示</h3>
+  <p class="note">左侧彩色竖条是唯一的视觉强调。三种语义，一种反色版本。</p>
+
+  <div class="ex"><span class="n">A</span> 标准（红色 — 警示/重要）</div>
+  <div class="callout">
+    <div class="callout-stripe"></div>
+    <div class="callout-body">
+      <div class="callout-t">核心原则</div>
+      <p>这套风格的所有排版决策都应该能被问一个问题：这个字号/字重/间距的选择，是为了让内容更有力，还是只是为了"好看"？</p>
+    </div>
+  </div>
+
+  <div class="ex"><span class="n">B</span> 中性（黑色 — 说明/补充）</div>
+  <div class="callout">
+    <div class="callout-stripe s-ink"></div>
+    <div class="callout-body">
+      <div class="callout-t dim">说明</div>
+      <p>Bebas Neue 不支持中文。所有中文标题需要使用 Noto Sans SC 900 配合 letter-spacing: -0.01em 获得类似的紧密感。</p>
+    </div>
+  </div>
+
+  <div class="ex"><span class="n">C</span> 反色（黑底 — 强调声明）</div>
+  <div class="callout-inv">
+    <div class="callout-t">风格声明</div>
+    <p>这套风格拒绝圆角、拒绝阴影、拒绝渐变。这不是技术限制，这是立场。</p>
+  </div>
+</div>
+
+<!-- C05 STAT CARDS -->
+<div class="comp">
+  <div class="comp-label">Component 05</div>
+  <h3>STAT CARD<span class="r"> ·</span> 数据卡片</h3>
+  <p class="note">数字用 Bebas Neue，单位用红色上标。四列共享边框网格，无圆角，无背景色差。</p>
+
+  <div class="stat-grid">
+    <div class="sc"><div class="sc-n">19<span class="sup">×</span></div><div class="sc-l">组件数量<br>本版本</div><div class="sc-d">↑ +4 vs v2</div></div>
+    <div class="sc"><div class="sc-n">4<span class="sup"></span></div><div class="sc-l">色彩总数<br>最简系统</div><div class="sc-d">— 保持</div></div>
+    <div class="sc"><div class="sc-n">3<span class="sup"></span></div><div class="sc-l">字体数量<br>职责分明</div><div class="sc-d">— 保持</div></div>
+    <div class="sc"><div class="sc-n">0<span class="sup">°</span></div><div class="sc-l">圆角<br>硬边界</div><div class="sc-d">— 原则</div></div>
+  </div>
+</div>
+
+<!-- C06 DATA BARS -->
+<div class="comp">
+  <div class="comp-label">Component 06</div>
+  <h3>DATA BAR<span class="r"> ·</span> 数据条</h3>
+  <p class="note">2px 高，极简。三列网格对齐，名称、条、数值各占一列，干净。</p>
+
+  <div class="dbars">
+    <div class="dbar"><span class="dbar-n">用户自主交互比例</span><div class="dbar-track"><div class="dbar-fill r" style="width:67%"></div></div><span class="dbar-v">67%</span></div>
+    <div class="dbar"><span class="dbar-n">AI 辅助决策占比</span><div class="dbar-track"><div class="dbar-fill" style="width:48%"></div></div><span class="dbar-v">48%</span></div>
+    <div class="dbar"><span class="dbar-n">可逆操作比例</span><div class="dbar-track"><div class="dbar-fill" style="width:31%"></div></div><span class="dbar-v">31%</span></div>
+    <div class="dbar"><span class="dbar-n">推理层可见性得分</span><div class="dbar-track"><div class="dbar-fill r" style="width:12%"></div></div><span class="dbar-v">12%</span></div>
+  </div>
+</div>
+
+<!-- C07 FEATURE CARDS -->
+<div class="comp">
+  <div class="comp-label">Component 07</div>
+  <h3>FEATURE CARD<span class="r"> ·</span> 特性卡片</h3>
+  <p class="note">大描边数字是图形，不是编号。三列共享边框网格。第三列可以翻转为深色。</p>
+
+  <div class="fc-grid">
+    <div class="fc">
+      <div class="fc-num">01</div>
+      <div class="fc-title">对话遗址</div>
+      <p class="fc-body">把思想的演化变成可挖掘的地层。系统追踪你的认知漂移，定期让你看见自己。</p>
+    </div>
+    <div class="fc">
+      <div class="fc-num">02</div>
+      <div class="fc-title">推理层界面</div>
+      <p class="fc-body">AI 的判断链条暴露给用户，人能在推理的中间节点介入，注入新的前提。</p>
+    </div>
+    <div class="fc inv">
+      <div class="fc-num">03</div>
+      <div class="fc-title">依赖透明度</div>
+      <p class="fc-body">让系统展示它在多大程度上替代了你的判断。不评判，只呈现。</p>
+    </div>
+  </div>
+</div>
+
+<!-- C08 NUMBER GRID -->
+<div class="comp">
+  <div class="comp-label">Component 08</div>
+  <h3>NUMBER GRID<span class="r"> ·</span> 数字即图形</h3>
+  <p class="note">这是 Brutalist 风格最核心的视觉语言：大号数字有五种呈现方式，都是图形，不只是信息。</p>
+
+  <div class="num-grid">
+    <div class="ng-item"><div class="ng-n">01</div><div class="ng-label">描边</div></div>
+    <div class="ng-item"><div class="ng-n fill">02</div><div class="ng-label">实填</div></div>
+    <div class="ng-item"><div class="ng-n red">03</div><div class="ng-label">红色实填</div></div>
+    <div class="ng-item"><div class="ng-n red-stroke">04</div><div class="ng-label">红色描边</div></div>
+    <div class="ng-item" style="background:var(--ink)"><div class="ng-n" style="color:var(--white);-webkit-text-stroke:none;">05</div><div class="ng-label" style="color:rgba(242,240,235,0.3);">白底黑</div></div>
+  </div>
+</div>
+
+<!-- C09 LIST -->
+<div class="comp">
+  <div class="comp-label">Component 09</div>
+  <h3>LIST<span class="r"> ·</span> 列表</h3>
+  <p class="note">两种变体：编号列表（大号 Bebas 数字作为视觉元素）和破折号列表。</p>
+
+  <div class="ex"><span class="n">A</span> 编号列表</div>
+  <ul class="blist">
+    <li><span class="ln r">01</span>界面不应该消失，而应该保持可见——让人意识到自己正在被特定的语法塑造</li>
+    <li><span class="ln">02</span>AI 的响应不应该完美，而应该保留摩擦——迫使人反思自己的提问方式</li>
+    <li><span class="ln">03</span>交互空间不应随时间单调收缩，用户的熟练度应带来更多可能性</li>
+  </ul>
+
+  <div class="ex"><span class="n">B</span> 破折号列表</div>
+  <ul class="dlist">
+    <li>文字即图形——字号的跨度本身就是一种叙事</li>
+    <li>留白不是"呼吸"，而是一种刻意的空洞</li>
+    <li>四色已经足够，更多只是噪音</li>
+  </ul>
+</div>
+
+<!-- C10 TIMELINE -->
+<div class="comp">
+  <div class="comp-label">Component 10</div>
+  <h3>TIMELINE<span class="r"> ·</span> 时间线</h3>
+  <p class="note">年份用 Bebas Neue，比其他版本更大更直接。红色实心圆点节点。</p>
+
+  <div class="tl">
+    <div class="tl-item"><div class="tl-yr">2025</div><div class="tl-c"><h4>操作预览标准化</h4><p>高影响操作在执行前提供完整预览，确认成为真实体验之后的选择。</p></div></div>
+    <div class="tl-item"><div class="tl-yr">2027</div><div class="tl-c"><h4>推理层界面普及</h4><p>AI 判断链条向用户暴露，人开始能在中间节点介入推理。</p></div></div>
+    <div class="tl-item"><div class="tl-yr">2030</div><div class="tl-c"><h4>平行现实界面标准化</h4><p>多条决策路径并行存在，用户在不同时间线之间切换比较。</p></div></div>
+  </div>
+</div>
+
+<!-- C11 TABLE -->
+<div class="comp">
+  <div class="comp-label">Component 11</div>
+  <h3>TABLE<span class="r"> ·</span> 对比表格</h3>
+  <p class="note">表头用浅灰背景 + 粗底线区分。表格整体有完整边框，单元格间用细线。</p>
+
+  <table class="btable">
+    <thead><tr>
+      <th>风格</th><th>底色</th><th>强调色</th><th>标题字体</th><th>标签字体</th><th>圆角</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Editorial Ink</td><td>暖白纸色</td><td><span class="hi">砖红</span></td><td>Noto Serif SC</td><td>Space Mono</td><td><span class="lo">无</span></td></tr>
+      <tr><td>Atelier Dark</td><td>深夜暖黑</td><td><span class="hi">琥珀金</span></td><td>DM Serif Display</td><td>Syne Mono</td><td><span class="lo">无</span></td></tr>
+      <tr><td>Brutalist Editorial</td><td>微暖白</td><td><span class="hi" style="color:var(--red)">暴力红</span></td><td>Bebas Neue</td><td>IBM Plex Mono</td><td><span class="lo">无</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- C12 META & BYLINE -->
+<div class="comp">
+  <div class="comp-label">Component 12</div>
+  <h3>META<span class="r"> ·</span> 元信息与作者卡</h3>
+
+  <div class="ex"><span class="n">A</span> 元信息行（带整体边框）</div>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-k">发布日期</div><div class="meta-v">2025.03</div></div>
+    <div class="meta-item"><div class="meta-k">阅读时长</div><div class="meta-v red">14</div></div>
+    <div class="meta-item"><div class="meta-k">字数</div><div class="meta-v">8,240</div></div>
+    <div class="meta-item"><div class="meta-k">版本</div><div class="meta-v">III</div></div>
+  </div>
+
+  <div class="ex"><span class="n">B</span> 作者卡（左侧大头像块）</div>
+  <div class="byline">
+    <div class="byline-av">明</div>
+    <div class="byline-body">
+      <div class="byline-name">李明远</div>
+      <div class="byline-role">交互哲学研究者 · 独立设计师</div>
+      <div class="byline-bio">专注于人机关系的哲学基础研究，探索AI时代交互设计的伦理边界。</div>
+    </div>
+  </div>
+</div>
+
+<!-- C13 TOC -->
+<div class="comp">
+  <div class="comp-label">Component 13</div>
+  <h3>TOC<span class="r"> ·</span> 目录</h3>
+  <p class="note">Bebas Neue 大数字作为章节编号，存在感弱化为装饰。hover 淡灰背景。</p>
+
+  <div class="toc">
+    <div class="toc-item"><span class="toc-n">01</span><span class="toc-title">精神气质</span><span class="toc-dots"></span><span class="toc-pg">04</span></div>
+    <div class="toc-item"><span class="toc-n">02</span><span class="toc-title">四色系统</span><span class="toc-dots"></span><span class="toc-pg">10</span></div>
+    <div class="toc-item"><span class="toc-n">03</span><span class="toc-title">三字体系</span><span class="toc-dots"></span><span class="toc-pg">18</span></div>
+    <div class="toc-item"><span class="toc-n">04</span><span class="toc-title">组件词汇</span><span class="toc-dots"></span><span class="toc-pg">26</span></div>
+  </div>
+</div>
+
+<!-- C14 FIGURE -->
+<div class="comp">
+  <div class="comp-label">Component 14</div>
+  <h3>FIGURE<span class="r"> ·</span> 图片说明</h3>
+  <p class="note">浅灰占位区，图注用细线分隔，小字标注图号。</p>
+
+  <div class="fig-ph">Image Placeholder · 图片占位区</div>
+  <p class="fig-cap"><strong>Fig 1.1</strong>交互哲学框架下，用户与AI系统的存在性关系示意图。横轴为时间积分，纵轴为交互自由度。</p>
+</div>
+
+<!-- C15 RULES -->
+<div class="comp">
+  <div class="comp-label">Component 15</div>
+  <h3>RULE<span class="r"> ·</span> 分割线</h3>
+
+  <div class="ex"><span class="n">A</span> 粗线（页面级边界，3px）</div>
+  <hr class="r3">
+  <div class="ex"><span class="n">B</span> 细线（内容分割，最常用）</div>
+  <hr class="r1">
+  <div class="ex"><span class="n">C</span> 红色短线（装饰锚点）</div>
+  <hr class="r-red">
+  <div class="ex"><span class="n">D</span> 带标签（章节过渡）</div>
+  <div class="r-label">第二章节 · Chapter Two</div>
+</div>
+
+<!-- C16 CHAPTER OPENER -->
+<div class="comp">
+  <div class="comp-label">Component 16</div>
+  <h3>CHAPTER OPENER<span class="r"> ·</span> 章节开篇</h3>
+  <p class="note">整体带边框，顶部信息栏，大描边数字 + 正文标题。数字是图形，不是信息。</p>
+
+  <div class="ch-opener">
+    <div class="cho-top">
+      <span class="cho-label">Chapter Four · 价值论基础</span>
+      <span class="cho-tag">From Description to Norm</span>
+    </div>
+    <div class="cho-body">
+      <div class="cho-num">04</div>
+      <div class="cho-title">从描述到规范</div>
+      <p class="cho-desc">宇宙本体论是描述性的，但应用本体论是规范性的。我们还需要回答：哪些交互模式是好的？</p>
+    </div>
+  </div>
+</div>
+
+<!-- C17 ANNOTATION -->
+<div class="comp">
+  <div class="comp-label">Component 17</div>
+  <h3>ANNOTATION<span class="r"> ·</span> 边注</h3>
+
+  <div class="ann">
+    <div class="ann-body">
+      <p>交互本体并不是一次性设计完成的结构。它像是一条不断被踩踏的小路，最初只是草地上的痕迹，随着使用者的增加逐渐清晰。每一次版本更新都会在这条路上留下新的分叉。</p>
+      <p>用户的行为反过来影响设计决策，而设计决策又重新塑造用户的习惯。</p>
+    </div>
+    <div class="ann-note">
+      <strong>边注</strong>
+      这种不对称布局来自学术论文的传统——主张在左宽栏，注释在右窄栏。左侧红色边框是唯一的视觉区分手段。
+    </div>
+  </div>
+</div>
+
+<!-- C18 FOOTNOTE + BREADCRUMB -->
+<div class="comp">
+  <div class="comp-label">Component 18</div>
+  <h3>FOOTNOTE & BREADCRUMB<span class="r"> ·</span> 脚注与路径</h3>
+
+  <div class="ex"><span class="n">A</span> 脚注（Bebas Neue 编号）</div>
+  <div class="fn">
+    <div class="fn-item"><span class="fn-n">1</span><span class="fn-t">普利高津的耗散结构理论（1977）指出，开放系统通过与外界的物质和能量交换来维持低熵状态。</span></div>
+    <div class="fn-item"><span class="fn-n">2</span><span class="fn-t">感觉剥夺实验证实：切断交互在 24–72 小时内导致显著认知扭曲。</span></div>
+  </div>
+
+  <div class="ex"><span class="n">B</span> 路径导航</div>
+  <div class="bc">
+    <span>设计系统</span><span class="bc-sep">/</span>
+    <span>Brutalist Editorial</span><span class="bc-sep">/</span>
+    <span class="bc-cur">组件词汇</span>
+  </div>
+</div>
+
+<!-- C19 DO / DON'T -->
+<div class="comp" style="border-bottom:none;">
+  <div class="comp-label">Component 19</div>
+  <h3>DO / DON<span class="r">'</span>T</h3>
+  <p class="note">最容易破坏这套风格的决策清单。</p>
+
+  <div class="dodont">
+    <div class="do">
+      <div class="do-l">✓ DO</div>
+      <ul>
+        <li>大号 Bebas 数字作为图形元素（描边、反色、跨版心）</li>
+        <li>字号跨度越大越好——8px 标签和 200px 大字可以同屏</li>
+        <li>红色只用于打断——编号、装饰线、最强调的标签</li>
+        <li>边框共享（负边距）让多个元素融为整体网格</li>
+        <li>空白区域是故意的设计，不是"还没填"</li>
+        <li>Ticker 滚动文字制造低频的背景噪声感</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <div class="dont-l">✗ DON'T</div>
+      <ul>
+        <li>不要加圆角——哪怕 2px 也会破坏整体的硬边质感</li>
+        <li>不要加阴影或渐变——这是另一套语言的语法</li>
+        <li>不要让红色超过 5% 的页面面积</li>
+        <li>不要用 Bebas 写中文正文——它只支持拉丁字符</li>
+        <li>不要让所有字号都"适中"——没有张力就没有这套风格</li>
+        <li>不要用超过四种颜色——多出来的都是噪音</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end wrap -->
+
+<!-- ══ MANIFESTO ══ -->
+<div class="manifesto">
+  <div class="manifesto-left">
+    <div class="manifesto-num">III</div>
+  </div>
+  <div class="manifesto-right">
+    <div class="manifesto-text">
+      版面不是内容的容器。<br>
+      版面本身<span class="r">就是</span>内容。<br>
+      字号就是态度。
+    </div>
+    <hr class="r-red" style="margin:24px 0;">
+    <p style="font-size:13px;line-height:1.8;color:rgba(13,13,11,0.5);max-width:440px;">这套风格不解释自己，不讨好读者，不为了让人舒服。它只是站在那里，用排版的方式表达一个关于设计应当如何存在的立场。</p>
+    <span class="manifesto-sub">Brutalist Editorial · Design System III · 19 Components · v1.0</span>
+  </div>
+</div>
+
+<footer>
+  <div class="f-brand">B<span>·</span>E</div>
+  <div class="f-center">Brutalist Editorial Design System · 2025</div>
+  <div class="f-tag">19 Components</div>
+  <div class="f-num">III</div>
+</footer>
+
+</body>
+</html>
